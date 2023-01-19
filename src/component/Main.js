@@ -1,14 +1,16 @@
 import React from 'react'
-import Header from '../common/header'
 import '../App.css'
-import Content from './Content'
+import Profile from './Profile'
 
-const Main = () => {
+const Main = (props) => {
   return (
-    <div className="main">
-      <Header />
-      <Content />
-    </div>
+    <>
+      {
+        props.cat.map((item,i) => {
+          return <Profile cat={item} key={i} />
+        })
+      }
+    </>
   )
 }
 

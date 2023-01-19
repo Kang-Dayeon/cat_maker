@@ -1,6 +1,6 @@
 export const catList = [
   {
-    id: 1,
+    id: 0,
     name: "치즈",
     gender: "Female",
     image: '../image/cat01.jpg',
@@ -11,7 +11,7 @@ export const catList = [
     die: false
   },
   {
-    id: 2,
+    id: 1,
     name: "콩떡",
     gender: "Male",
     image: '../image/cat02.jpg',
@@ -22,7 +22,7 @@ export const catList = [
     die: false
   },
   {
-    id: 3,
+    id: 2,
     name: "쿠로",
     gender: "Female",
     image: '../image/cat03.jpg',

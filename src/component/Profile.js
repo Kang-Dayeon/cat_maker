@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import '../App.css'
+import {useDispatch, useSelector} from 'react-redux'
 
 const Profile = (props) => {
   return (
@@ -21,7 +23,7 @@ const Profile = (props) => {
           <p className="state_name">Weight</p>
         </li>
       </ul>
-      <button className="btn more">View Profile</button>
+      <Link className="btn more" to={'/detail/' + props.cat.id} >View Profile</Link>
     </div>
   )
 }
