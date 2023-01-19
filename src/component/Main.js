@@ -1,10 +1,14 @@
 import React from 'react'
+import Header from '../common/header'
+import '../App.css'
+import Content from './Content'
 
 const Main = () => {
   return (
-    <>
-      <h1>Cat Maker</h1>
-    </>
+    <div className="main">
+      <Header />
+      <Content />
+    </div>
   )
 }
 
