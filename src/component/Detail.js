@@ -1,18 +1,16 @@
 import React from 'react'
 import '../App.css'
 import {useParams} from 'react-router-dom'
-import {useDispatch, useSelector, connect} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {increaseCount} from '../reducer/giveFood'
 
 const Detail = (props) => {
-
-  const id = useParams().key
   const dispatch = useDispatch()
-  const {weight} = useSelector(state => state.counter)
   const increases = () => {
-    dispatch(increaseCount(props.cat[id]))
+    dispatch(increaseCount())
   }
-  console.log(weight)
+  console.log(increases)
+  const id = useParams().key
   return (
     <div className="detail">
       <div className="detail_profile">
@@ -32,7 +30,7 @@ const Detail = (props) => {
             <p className="state_name">Age</p>
           </li>
           <li className="weight">
-            <p className="state_number">{weight}kg</p>
+            <p className="state_number">{props.cat[id].age}kg</p>
             <p className="state_name">Weight</p>
           </li>
         </ul>

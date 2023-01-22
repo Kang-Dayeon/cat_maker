@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux'
-import counter from './giveFood'
+import weightIncrease from './giveFood'
 
 const rootReducer = combineReducers({
-  counter
+  weightIncrease
 })
 
 export default rootReducer

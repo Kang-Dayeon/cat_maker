@@ -2,11 +2,13 @@ import { Route, Routes} from 'react-router-dom'
 import React from 'react'
 import Main from '../component/Main'
 import Detail from '../component/Detail'
-import {catList} from '../data/cat_List'
 import Header from '../common/header'
 import '../App.css'
+import {useSelector} from 'react-redux'
 
 const Routers = () => {
+  const catDate = useSelector(state => state.weightIncrease)
+  
   return (
     <>
       <div className="wrap">
@@ -14,8 +16,8 @@ const Routers = () => {
         <div className="content">
           <div className="content_wrap">
             <Routes>
-              <Route exact path="/" element={<Main cat={catList}/>}></Route>
-              <Route path="/detail/:key" element={<Detail cat={catList}/>}></Route>
+              <Route exact path="/" element={<Main cat={catDate}/>}></Route>
+              <Route path="/detail/:key" element={<Detail cat={catDate}/>}></Route>
             </Routes>
           </div>
         </div>

@@ -8,7 +8,6 @@ import { createStore } from 'redux'
 import rootReducer from './reducer'
 
 const store = createStore(rootReducer)
-console.log(store.getState())
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
