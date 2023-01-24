@@ -7,7 +7,8 @@ import '../App.css'
 import {useSelector} from 'react-redux'
 
 const Routers = () => {
-  const catDate = useSelector(state => state.weightIncrease)
+  const catData = useSelector(state => state.reducer)
+  // console.log(catData)
   
   return (
     <>
@@ -16,8 +17,8 @@ const Routers = () => {
         <div className="content">
           <div className="content_wrap">
             <Routes>
-              <Route exact path="/" element={<Main cat={catDate}/>}></Route>
-              <Route path="/detail/:key" element={<Detail cat={catDate}/>}></Route>
+              <Route exact path="/" element={<Main cat={catData}/>}></Route>
+              <Route path="/detail/:key" element={<Detail cat={catData}/>}></Route>
             </Routes>
           </div>
         </div>

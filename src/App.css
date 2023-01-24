@@ -24,6 +24,9 @@ img{
     background: #b2acf3;
     cursor: pointer;
 }
+.btn.die{
+    background: #8f9da9;
+}
 .img{
     border-radius: 50%;
     overflow: hidden;

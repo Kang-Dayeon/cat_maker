@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux'
-import weightIncrease from './giveFood'
+import reducer from './catData'
 
 const rootReducer = combineReducers({
-  weightIncrease
+  reducer
 })
 
 export default rootReducer

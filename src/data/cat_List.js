@@ -8,7 +8,8 @@ export const catList = [
     age: 1,
     weight: 1,
     pat: false,
-    die: false
+    die: false,
+    date : ''
   },
   {
     id: 1,
@@ -19,7 +20,8 @@ export const catList = [
     age: 1,
     weight: 1,
     pat: false,
-    die: false
+    die: false,
+    date : ''
   },
   {
     id: 2,
@@ -30,6 +32,7 @@ export const catList = [
     age: 1,
     weight: 1,
     pat: false,
-    die: false
+    die: false,
+    date : ''
   }
 ]
