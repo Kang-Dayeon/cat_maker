@@ -7,9 +7,9 @@ export const catList = [
     dieImage: '../image/cat01_die.jpg',
     age: 1,
     weight: 1,
-    pat: false,
+    fat: false,
     die: false,
-    date : ''
+    date : []
   },
   {
     id: 1,
@@ -19,9 +19,9 @@ export const catList = [
     dieImage: '../image/cat02_die.jpg',
     age: 1,
     weight: 1,
-    pat: false,
+    fat: false,
     die: false,
-    date : ''
+    date : []
   },
   {
     id: 2,
@@ -31,8 +31,8 @@ export const catList = [
     dieImage: '../image/cat03_die.jpg',
     age: 1,
     weight: 1,
-    pat: false,
+    fat: false,
     die: false,
-    date : ''
+    date : []
   }
 ]

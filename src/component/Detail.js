@@ -2,18 +2,23 @@ import React, { useEffect } from 'react'
 import '../App.css'
 import {useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {increaseCount, addAge, die} from '../reducer/catData'
+import {increaseCount, addAge, die, fat} from '../reducer/catData'
 
 const Detail = (props) => {
   const id = useParams().key
   const dispatch = useDispatch()
+  const date = new Date()
+  const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
   const increases = () => {
-    dispatch(increaseCount(id, props.cat[id].weight + 0.5))
+    dispatch(increaseCount(id, props.cat[id].weight + 0.5, currentDate))
   }
 
   useEffect(() => {
     if(props.cat[id].weight % 3 === 0){
       dispatch(addAge(id, props.cat[id].age + 1))
+    }
+    if(props.cat[id].weight >= 30){
+      dispatch(fat(id, props.cat[id].fat = true))
     }
   },[props.cat[id].weight])
 
@@ -21,7 +26,6 @@ const Detail = (props) => {
     if(props.cat[id].age >= 15){
       dispatch(die(id, props.cat[id].die = true))
     }
-    console.log(props.cat[id].age)
   }, [props.cat[id].age])
 
   return (
@@ -30,7 +34,14 @@ const Detail = (props) => {
         <div className="detail_img img">
           <img src={props.cat[id].die ? props.cat[id].dieImage : props.cat[id].image} />
         </div>
-        <h3 className="detail_name">{props.cat[id].name}</h3>
+        <div className="detail_text">
+          <h3 className="detail_name">{props.cat[id].name}</h3>
+          {
+            props.cat[id].fat ?
+              <div className="badge fat">Fatness</div> :
+              <div className="badge">Normal</div>
+          }
+        </div>
       </div>
       <div className="detail_info">
         <ul className="profile_state">
@@ -48,11 +59,15 @@ const Detail = (props) => {
           </li>
         </ul>
         <div className="add_text">
-          <h4>Meal Time : {props.cat[id].date}</h4>
+          <h4>[ Meal Time ]</h4>
           <ul>
-            <li>
-              <p></p>
-            </li>
+            {
+              props.cat[id].date.map((item) => {
+                return (
+                  <li>{item}</li>
+                )
+              })
+            }
           </ul>
         </div>
         {

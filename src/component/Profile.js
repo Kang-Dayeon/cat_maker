@@ -22,6 +22,11 @@ const Profile = (props) => {
           <p className="state_name">Weight</p>
         </li>
       </ul>
+      {
+        props.cat.fat ?
+          <div className="badge fat">Fatness</div> :
+          <div className="badge">Normal</div>
+      }
       <Link className="btn more" to={'/detail/' + props.cat.id} >View Profile</Link>
     </div>
   )
