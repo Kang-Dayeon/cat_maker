@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import '../App.css'
 import {useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {increaseCount, addAge, die, fat} from '../reducer/catData'
+import {increaseCount, die, fat} from '../reducer/catData'
 
 const Detail = (props) => {
   const id = useParams().key
@@ -10,13 +10,10 @@ const Detail = (props) => {
   const date = new Date()
   const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
   const increases = () => {
-    dispatch(increaseCount(id, props.cat[id].weight + 0.5, currentDate))
+    dispatch(increaseCount(id, props.cat[id].weight + 0.5, currentDate, props.cat[id].age))
   }
 
   useEffect(() => {
-    if(props.cat[id].weight % 3 === 0){
-      dispatch(addAge(id, props.cat[id].age + 1))
-    }
     if(props.cat[id].weight >= 30){
       dispatch(fat(id, props.cat[id].fat = true))
     }

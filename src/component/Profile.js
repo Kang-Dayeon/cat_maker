@@ -5,8 +5,8 @@ import '../App.css'
 const Profile = (props) => {
   return (
     <div className="profile">
-      <div className="profile_img img">
-      <img src={props.cat.die ? props.cat.dieImage : props.cat.image} />
+      <div className={props.cat.fat ? 'profile_img img fat' : 'profile_img img'}>
+        <img src={props.cat.die ? props.cat.dieImage : props.cat.image} />
       </div>
       <div className="profile_text">
         <p className="profile_name">{props.cat.name}</p>

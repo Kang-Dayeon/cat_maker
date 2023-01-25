@@ -1,11 +1,9 @@
 import {catList} from '../data/cat_List'
 export const INCREASE = 'INCREASE'
-export const AGE = 'AGE'
 export const DIE = 'DIE'
 export const FAT = 'FAT'
 
-export const increaseCount = (currentId, currentWeight, date) => ({ type: INCREASE, currentId, currentWeight, date});
-export const addAge = (currentId, currentAge) => ({ type: AGE, currentId, currentAge })
+export const increaseCount = (currentId, currentWeight, date, currentAge) => ({ type: INCREASE, currentId, currentWeight, date, currentAge});
 export const die = (currentId, currentDid) => ({type: DIE, currentId, currentDid})
 export const fat = (currentId, currentFat) => ({type: FAT, currentId, currentFat})
 
@@ -16,11 +14,9 @@ const reducer = (state = initialState, action) => {
     case INCREASE:
       state[action.currentId].weight = action.currentWeight
       state[action.currentId].date.push(action.date)
-      return[
-        ...state
-      ]
-    case AGE:
-      state[action.currentId].age = action.currentAge
+      if(state[action.currentId].weight % 3 === 0 && state[action.currentId].weight <= 42){
+        state[action.currentId].age = action.currentAge + 1
+      }
       return[
         ...state
       ]
