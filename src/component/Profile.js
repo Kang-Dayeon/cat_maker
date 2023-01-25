@@ -8,7 +8,7 @@ const Profile = (props) => {
       <div className={props.cat.fat && !props.cat.death ? 'profile_img img fat' :
         props.cat.death ? 'profile_img img death' :
         'profile_img img'}>
-        <img src={props.cat.die ? props.cat.dieImage : props.cat.image} />
+        <img src={props.cat.death ? props.cat.dieImage : props.cat.image} />
       </div>
       <div className="profile_text">
         <p className="profile_name">{props.cat.name}</p>
