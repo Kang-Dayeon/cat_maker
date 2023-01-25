@@ -24,7 +24,7 @@ img{
     background: #b2acf3;
     cursor: pointer;
 }
-.btn.die{
+.btn.death{
     background: #8f9da9;
     cursor: default;
 }
@@ -36,7 +36,7 @@ img{
 .img.fat{
     border-color: #E33D64;
 }
-.img.die{
+.img.death{
     border-color: #000;
 }
 .badge{
@@ -51,7 +51,7 @@ img{
 .badge.fat{
     background: #E33D64;
 }
-.badge.die{
+.badge.death{
     background: #000;
 }
 .wrap{

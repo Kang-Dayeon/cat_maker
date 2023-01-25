@@ -21,7 +21,7 @@ const Detail = (props) => {
 
   useEffect(() => {
     if(props.cat[id].age >= 15){
-      dispatch(handleLifeState(id, props.cat[id].die = true))
+      dispatch(handleLifeState(id, props.cat[id].death = true))
     }
   }, [props.cat[id].age])
 
@@ -29,13 +29,13 @@ const Detail = (props) => {
     <div className="detail">
       <div className="detail_profile">
         <div className="detail_img img">
-          <img src={props.cat[id].die ? props.cat[id].dieImage : props.cat[id].image} />
+          <img src={props.cat[id].death ? props.cat[id].dieImage : props.cat[id].image} />
         </div>
         <div className="detail_text">
           <h3 className="detail_name">{props.cat[id].name}</h3>
           {
-            props.cat[id].fat && ! props.cat[id].die ? <div className="badge fat">Fatness</div> :
-            props.cat[id].die ? <div className="badge die">Die</div> :
+            props.cat[id].fat && ! props.cat[id].death ? <div className="badge fat">Fatness</div> :
+            props.cat[id].death ? <div className="badge death">Death</div> :
             <div className="badge">Normal</div>
           }
         </div>
@@ -68,8 +68,8 @@ const Detail = (props) => {
           </ul>
         </div>
         {
-          props.cat[id].die ?
-          <button className="btn die" disabled>DIE</button> :
+          props.cat[id].death ?
+          <button className="btn death" disabled>Death</button> :
           <button className="btn meal" onClick={increases}>Give Food</button>
         }
         

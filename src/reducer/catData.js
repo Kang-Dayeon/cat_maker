@@ -21,7 +21,7 @@ const reducer = (state = initialState, action) => {
         ...state
       ]
     case LIFE:
-      state[action.currentId].die = action.currentLifeState
+      state[action.currentId].death = action.currentLifeState
       return[
         ...state
       ]

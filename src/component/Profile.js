@@ -5,8 +5,8 @@ import '../App.css'
 const Profile = (props) => {
   return (
     <div className="profile">
-      <div className={props.cat.fat && !props.cat.die ? 'profile_img img fat' :
-        props.cat.die ? 'profile_img img die' :
+      <div className={props.cat.fat && !props.cat.death ? 'profile_img img fat' :
+        props.cat.death ? 'profile_img img death' :
         'profile_img img'}>
         <img src={props.cat.die ? props.cat.dieImage : props.cat.image} />
       </div>
@@ -25,8 +25,8 @@ const Profile = (props) => {
         </li>
       </ul>
       {
-        props.cat.fat && !props.cat.die ? <div className="badge fat">Fatness</div> :
-        props.cat.die ? <div className="badge die">Die</div> :
+        props.cat.fat && !props.cat.death ? <div className="badge fat">Fatness</div> :
+        props.cat.death ? <div className="badge death">Death</div> :
         <div className="badge">Normal</div>
       }
       <Link className="btn more" to={'/detail/' + props.cat.id} >View Profile</Link>
