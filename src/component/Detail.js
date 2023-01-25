@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import '../App.css'
 import {useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {increaseCount, die, fat} from '../reducer/catData'
+import {increaseCount, handleLifeState, handleBodyState} from '../reducer/catData'
 
 const Detail = (props) => {
   const id = useParams().key
@@ -15,13 +15,13 @@ const Detail = (props) => {
 
   useEffect(() => {
     if(props.cat[id].weight >= 30){
-      dispatch(fat(id, props.cat[id].fat = true))
+      dispatch(handleBodyState(id, props.cat[id].fat = true))
     }
   },[props.cat[id].weight])
 
   useEffect(() => {
     if(props.cat[id].age >= 15){
-      dispatch(die(id, props.cat[id].die = true))
+      dispatch(handleLifeState(id, props.cat[id].die = true))
     }
   }, [props.cat[id].age])
 
@@ -34,9 +34,9 @@ const Detail = (props) => {
         <div className="detail_text">
           <h3 className="detail_name">{props.cat[id].name}</h3>
           {
-            props.cat[id].fat ?
-              <div className="badge fat">Fatness</div> :
-              <div className="badge">Normal</div>
+            props.cat[id].fat && ! props.cat[id].die ? <div className="badge fat">Fatness</div> :
+            props.cat[id].die ? <div className="badge die">Die</div> :
+            <div className="badge">Normal</div>
           }
         </div>
       </div>
