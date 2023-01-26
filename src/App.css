@@ -185,6 +185,7 @@ img{
 }
 
 .add_text{
+    display: flex;
     padding: 20px;
     height: 200px;
     overflow-x: hidden;
@@ -203,6 +204,9 @@ img{
 }
 .add_text::-webkit-scrollbar-track{
     background-color: #e4e9fa;
+}
+.add_text div{
+    width: 50%;
 }
 .add_text h4{
     color: #5b608c;

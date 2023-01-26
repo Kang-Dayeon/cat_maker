@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useEffect, useState} from 'react'
 import '../App.css'
 import {useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
@@ -7,6 +7,8 @@ import {increaseCount, handleLifeState, handleBodyState} from '../reducer/catDat
 const Detail = (props) => {
   const id = useParams().key
   const dispatch = useDispatch()
+  const [message, setMessge] = useState([])
+  const [num, setNum] = useState(0)
   const date = new Date()
   const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
   const increases = () => {
@@ -22,6 +24,10 @@ const Detail = (props) => {
   useEffect(() => {
     if(props.cat[id].age >= 15){
       dispatch(handleLifeState(id, props.cat[id].death = true))
+    }
+    if(props.cat[id].age % 3 === 0 || props.cat[id].age === 1){
+      setNum(num + 1)
+      setMessge(props.cat[id].message.slice(0,num))
     }
   }, [props.cat[id].age])
 
@@ -56,16 +62,30 @@ const Detail = (props) => {
           </li>
         </ul>
         <div className="add_text">
-          <h4>[ Meal Time ]</h4>
-          <ul>
-            {
-              props.cat[id].date.map((item) => {
-                return (
-                  <li>{item}</li>
-                )
-              })
-            }
-          </ul>
+          <div className="time">
+            <h4>[ Meal Time ]</h4>
+            <ul>
+              {
+                props.cat[id].date.map((item) => {
+                  return (
+                    <li>{item}</li>
+                  )
+                })
+              }
+            </ul>
+          </div>
+          <div className="message">
+            <h4>[ Message ]</h4>
+            <ul>
+              {
+                message.map((item) => {
+                  return (
+                    <li>{item}</li>
+                  )
+                })
+              }
+            </ul>
+          </div>
         </div>
         {
           props.cat[id].death ?
