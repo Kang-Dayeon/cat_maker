@@ -7,7 +7,7 @@ import {increaseCount, handleLifeState, handleBodyState} from '../reducer/catDat
 const Detail = (props) => {
   const id = useParams().key
   const dispatch = useDispatch()
-  const [message, setMessge] = useState([])
+  const [message, setMessage] = useState([])
   const [num, setNum] = useState(0)
   const date = new Date()
   const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
@@ -27,7 +27,7 @@ const Detail = (props) => {
     }
     if(props.cat[id].age % 3 === 0 || props.cat[id].age === 1){
       setNum(num + 1)
-      setMessge(props.cat[id].message.slice(0,num))
+      setMessage(props.cat[id].message.slice(0,num))
     }
   }, [props.cat[id].age])
 
