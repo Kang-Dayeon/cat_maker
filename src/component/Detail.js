@@ -2,13 +2,17 @@ import React, {useEffect, useState} from 'react'
 import '../App.css'
 import {useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {increaseCount, handleLifeState, handleBodyState} from '../reducer/catData'
+import {
+  increaseCount,
+  handleLifeState,
+  handleBodyState,
+  messageAdd,
+  messageNum,
+} from '../reducer/catData'
 
 const Detail = (props) => {
   const id = useParams().key
   const dispatch = useDispatch()
-  const [message, setMessage] = useState([])
-  const [num, setNum] = useState(0)
   const date = new Date()
   const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
   const increases = () => {
@@ -26,10 +30,15 @@ const Detail = (props) => {
       dispatch(handleLifeState(id, props.cat[id].death = true))
     }
     if(props.cat[id].age % 3 === 0 || props.cat[id].age === 1){
-      setNum(num + 1)
-      setMessage(props.cat[id].message.slice(0,num))
+      dispatch(messageNum(id, props.cat[id].messageNum + 1))
     }
   }, [props.cat[id].age])
+
+  useEffect(() => {
+    dispatch(messageAdd(id, props.cat[id].messageAll.slice(0,props.cat[id].messageNum)))
+  }, [props.cat[id].messageNum])
+
+
 
   return (
     <div className="detail">
@@ -78,7 +87,7 @@ const Detail = (props) => {
             <h4>[ Message ]</h4>
             <ul>
               {
-                message.map((item) => {
+                props.cat[id].message.map((item) => {
                   return (
                     <li>{item}</li>
                   )

@@ -10,13 +10,16 @@ export const catList = [
     fat: false,
     death: false,
     date: [],
-    message: [
+    messageNum: 0,
+    messageAll: [
+      '잘 키워보시게',
       '밥줘!!!',
       '벌써 많이 컷다용🥳',
       '세월이 빠르구먼..홀홀',
       '이제 움직이기 힘들다옹',
       '그동안 고마웠...😇'
-    ]
+    ],
+    message:[]
   },
   {
     id: 1,
@@ -29,13 +32,16 @@ export const catList = [
     fat: false,
     death: false,
     date: [],
-    message: [
+    messageNum: 0,
+    messageAll: [
+      '반갑냥',
       '밥이 부족해.....',
       '나도 다 컷당!!🐾👤',
       '아직 팔팔하당🐱',
       '귀찮아...',
       '...😇'
-    ]
+    ],
+    message:[]
   },
   {
     id: 2,
@@ -48,12 +54,15 @@ export const catList = [
     fat: false,
     death: false,
     date: [],
-    message: [
+    messageNum: 0,
+    messageAll: [
       '냥?',
       '냥얀😻',
+      '🐱‍👤',
       '이제 말할수 있다😼',
       '이제 그만....',
       '죽여줘...🙀‍'
-    ]
+    ],
+    message:[]
   }
 ]
