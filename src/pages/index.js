@@ -1,12 +1,14 @@
 import React from 'react'
 import '../App.css'
-import Profile from './profile/Profile'
+import Profile from './profile/profile'
+import { useSelector } from 'react-redux'
 
-const Index = (props) => {
+const Index = () => {
+  const cats = useSelector(state => state.cats.cats)
   return (
     <>
       {
-        props.cat.map((item,i) => {
+        cats.map((item,i) => {
           return <Profile cat={item} key={i} />
         })
       }

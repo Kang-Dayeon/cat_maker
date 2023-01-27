@@ -1,9 +1,10 @@
 export const catStatus = {
-  state1: 'Normal',
-  state2: 'Fatness',
-  state3: 'Death'
+  state1: 'Skinny',
+  state2: 'Normal',
+  state3: 'Fatness',
+  state4: 'Death'
 }
-export const catList = [
+export const cats = [
   {
     id: 0,
     name: '치즈',
@@ -12,9 +13,10 @@ export const catList = [
     dieImage: require('../assets/image/cat01_die.jpg'),
     age: 1,
     weight: 1,
+    state: catStatus.state2,
     fat: false,
     death: false,
-    date: [],
+    dates: [],
     messageNum: 0,
     messages: [
       '잘 키워보시게',
@@ -34,9 +36,10 @@ export const catList = [
     dieImage: require('../assets/image/cat02_die.jpg'),
     age: 1,
     weight: 1,
+    state: catStatus.state2,
     fat: false,
     death: false,
-    date: [],
+    dates: [],
     messageNum: 0,
     messages: [
       '반갑냥',
@@ -56,9 +59,10 @@ export const catList = [
     dieImage: require('../assets/image/cat03_die.jpg'),
     age: 1,
     weight: 1,
+    state: catStatus.state2,
     fat: false,
     death: false,
-    date: [],
+    dates: [],
     messageNum: 0,
     messages: [
       '냥?',
