@@ -1,4 +1,4 @@
-import {catList} from '../data/cat_List'
+import {catList} from '../data/catList'
 export const INCREASE = 'INCREASE'
 export const LIFE = 'STATE/LIFE'
 export const BODY = 'STATE/BODY'

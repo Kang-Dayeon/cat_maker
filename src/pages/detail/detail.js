@@ -1,18 +1,22 @@
 import React, {useEffect} from 'react'
-import '../App.css'
+import '../../App.css'
 import {useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
+//component
+import Button from '../../component/Button'
+import Badge from '../../component/Badge'
 import {
   increaseCount,
   handleLifeState,
   handleBodyState,
   messageAdd,
   messageNum,
-} from '../reducer/catData'
+} from '../../redux/cats'
 
 const Detail = (props) => {
   const id = useParams().key
   const dispatch = useDispatch()
+
   const date = new Date()
   const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
   const increases = () => {
@@ -35,7 +39,7 @@ const Detail = (props) => {
   }, [props.cat[id].age])
 
   useEffect(() => {
-    dispatch(messageAdd(id, props.cat[id].messageAll.slice(0,props.cat[id].messageNum)))
+    dispatch(messageAdd(id, props.cat[id].messages.slice(0,props.cat[id].messageNum)))
   }, [props.cat[id].messageNum])
 
 
@@ -49,9 +53,9 @@ const Detail = (props) => {
         <div className="detail_text">
           <h3 className="detail_name">{props.cat[id].name}</h3>
           {
-            props.cat[id].fat && ! props.cat[id].death ? <div className="badge fat">Fatness</div> :
-            props.cat[id].death ? <div className="badge death">Death</div> :
-            <div className="badge">Normal</div>
+            props.cat[id].fat && ! props.cat[id].death ? <Badge color={'#E33D64'}>Fatness</Badge> :
+            props.cat[id].death ? <Badge color={'#000'}>Death</Badge> :
+            <Badge>Normal</Badge>
           }
         </div>
       </div>
@@ -98,10 +102,9 @@ const Detail = (props) => {
         </div>
         {
           props.cat[id].death ?
-          <button className="btn death" disabled>Death</button> :
-          <button className="btn meal" onClick={increases}>Give Food</button>
+          <Button color={"#8f9da9"} cursor={'default'} disabled>Death</Button> :
+          <Button onClick={increases}>Give Food</Button>
         }
-        
       </div>
     </div>
   )

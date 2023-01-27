@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import '../App.css'
+import '../../App.css'
+//component
+import Button from '../../component/Button'
+import Badge from '../../component/Badge'
 
 const Profile = (props) => {
   return (
@@ -25,11 +28,27 @@ const Profile = (props) => {
         </li>
       </ul>
       {
-        props.cat.fat && !props.cat.death ? <div className="badge fat">Fatness</div> :
-        props.cat.death ? <div className="badge death">Death</div> :
-        <div className="badge">Normal</div>
+        props.cat.fat && !props.cat.death ?
+          <Badge
+            color={'#E33D64'}
+            position={'absolute'}
+            right={'22%'}
+            top={'12%'}
+          >Fatness</Badge> :
+          props.cat.death ?
+            <Badge
+              color={'#000'}
+              position={'absolute'}
+              right={'22%'}
+              top={'12%'}
+            >Death</Badge> :
+            <Badge
+              position={'absolute'}
+              right={'22%'}
+              top={'12%'}
+            >Normal</Badge>
       }
-      <Link className="btn more" to={'/detail/' + props.cat.id} >View Profile</Link>
+      <Button><Link to={'/detail/' + props.cat.id} >View Profile</Link></Button>
     </div>
   )
 }

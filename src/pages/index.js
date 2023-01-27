@@ -1,8 +1,8 @@
 import React from 'react'
 import '../App.css'
-import Profile from './Profile'
+import Profile from './profile/Profile'
 
-const Main = (props) => {
+const Index = (props) => {
   return (
     <>
       {
@@ -14,4 +14,4 @@ const Main = (props) => {
   )
 }
 
-export default Main
+export default Index
