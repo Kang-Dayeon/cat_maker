@@ -5,7 +5,8 @@ export const catSlice = createSlice({
   name: 'cat',
   initialState: {
     cats: data.cats,
-    selectedCat: null
+    selectedCat: null,
+    food: data.food
   },
   reducers: {
     addHistory: (state, action) => {
@@ -18,6 +19,9 @@ export const catSlice = createSlice({
     },
     handleSelectedCat: (state, action) => {
       state.selectedCat = state.cats.find(cat => cat.id === action.payload)
+    },
+    giveFood: (state,action) => {
+
     }
   }
 })

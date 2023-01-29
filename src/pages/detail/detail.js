@@ -1,21 +1,16 @@
 import React, { useEffect } from 'react'
-import '../../App.css'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import '../../App.css'
 //component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
-
+// redux
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { handleSelectedCat } from '../../redux/cats'
-
-// import {
-//   increaseCount,
-//   handleLifeState,
-//   handleBodyState,
-//   messageAdd,
-//   messageNum,
-// } from '../../redux/cats'
+// fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBottleWater, faDrumstickBite, faBowlRice } from "@fortawesome/free-solid-svg-icons";
 
 const Detail = () => {
   const params = useParams()
@@ -122,11 +117,14 @@ const Detail = () => {
             </ul>
           </div>
         </div>
-        {
+        <Button food={'Water'}><FontAwesomeIcon icon={faBottleWater} size="lg" /></Button>
+        <Button food={'Meat'}><FontAwesomeIcon icon={faDrumstickBite} /></Button>
+        <Button food={'Feed'}><FontAwesomeIcon icon={faBowlRice} /></Button>
+        {/* {
           selectedCat.death ?
           <Button color={"#8f9da9"} cursor={'default'} disabled>Death</Button> :
           <Button >Give Food</Button>
-        }
+        } */}
       </div>
     </div>
   )

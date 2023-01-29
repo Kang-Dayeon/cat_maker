@@ -4,6 +4,11 @@ export const catStatus = {
   state3: 'Fatness',
   state4: 'Death'
 }
+export const food = {
+  water: 'water',
+  meat: 'meat',
+  feed: 'feed',
+}
 export const cats = [
   {
     id: 0,
