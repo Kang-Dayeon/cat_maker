@@ -23,12 +23,15 @@ const Detail = () => {
 
   const cats = useSelector(state => state.cats.cats)
   const selectedCat = useSelector(state => state.cats.selectedCat)
+  // const disabled = useSelector(state => state.cats.disabled)
+  const user = useSelector(state => state.user.loginUser)
 
   const addEating = (actionType) => {
     dispatch(addHistory({
       type: 'eat',
       dates: new Date().toLocaleString(),
       actionType,
+      disabled: false
     }))
   }
 
@@ -39,6 +42,7 @@ const Detail = () => {
       navigate('/')
     }
   })
+
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
@@ -94,7 +98,7 @@ const Detail = () => {
                   </span>
                   {selectedCat.history.length > 0 ?
                     selectedCat.history[0].dates :
-                    ''}
+                    ''} {user.name}
                 </p>
               </li>
               <li className="time_section">
@@ -120,7 +124,7 @@ const Detail = () => {
                   </span>
                   {selectedCat.history.length > 0 ?
                     selectedCat.history[selectedCat.history.length - 1].dates :
-                    ''}
+                    ''} {user.name}
                 </p>
               </li>
               <li><h3>[ Timeline ]</h3></li>
@@ -139,7 +143,7 @@ const Detail = () => {
                                 <FontAwesomeIcon icon={faDumbbell}/>
                         }
                       </span>
-                      {item.dates}
+                      {item.dates}  {user.name}
                     </li>
                   )
                 })
@@ -161,21 +165,21 @@ const Detail = () => {
         </div>
         <Button
           action={'Water'}
-          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
           onClick={() => addEating('water')}
         >
           <FontAwesomeIcon icon={faBottleWater}/>
         </Button>
         <Button
           action={'Meat'}
-          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
           onClick={() => addEating('meat')}
         >
           <FontAwesomeIcon icon={faDrumstickBite}/>
         </Button>
         <Button
           action={'Feed'}
-          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
           onClick={() => addEating('feed')}
         >
           <FontAwesomeIcon icon={faBowlRice}/>

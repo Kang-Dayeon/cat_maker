@@ -203,6 +203,32 @@ img{
 .time_section{
     margin-bottom: 10px;
 }
+
+/*login*/
+.login {
+    display: flex;
+    justify-content: center;
+    padding: 50px 30px;
+    width: 500px;
+    background-color: #e4e9fa;
+    border-radius: 20px;
+}
+.login h2{
+    font-size: 30px;
+    color: #5b608c;
+}
+.login-form{
+    display: flex;
+    flex-direction: column;
+}
+.login-form input {
+    margin-top: 15px;
+    padding: 5px 10px;
+    max-width: 300px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+}
 @media (max-width: 1050px){
     .content{
         padding: 50px 0;

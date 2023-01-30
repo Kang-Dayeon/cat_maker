@@ -1,15 +1,14 @@
-import { Route, Routes} from 'react-router-dom'
-import React from 'react'
+import {Route, Routes, useNavigate} from 'react-router-dom'
+import React, {useEffect} from 'react'
 import Index from '../../pages'
 import Detail from '../../pages/detail/detail'
+import Login from '../../pages/login/login'
 import Header from '../../rayouts/header'
 import '../../App.css'
-// import {useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 
 const Routers = () => {
-  // const catData = useSelector(state => state.reducer)
-  // console.log(catData)
-  
+
   return (
     <>
       <div className="wrap">
@@ -17,8 +16,9 @@ const Routers = () => {
         <div className="content">
           <div className="content_wrap">
             <Routes>
-              <Route exact path="/" element={<Index/>}></Route>
+              <Route path="/" element={<Index/>}></Route>
               <Route path="/detail/:key" element={<Detail/>}></Route>
+              <Route path="/login" element={<Login/>}></Route>
             </Routes>
           </div>
         </div>

@@ -6,10 +6,16 @@ export const catSlice = createSlice({
   initialState: {
     cats: data.cats,
     selectedCat: null,
+    random: 0,
   },
   reducers: {
     addHistory: (state, action) => {
-      state.selectedCat.history.push(action.payload)
+      state.random = (Math.random() * (10 - 1)) + 2
+
+      if(state.random > 5) {
+        state.selectedCat.disabled = true
+      }
+      setTimeout(() => state.selectedCat.disabled = true, 5000)
       if(action.payload.actionType === 'water') {
         state.selectedCat.weight = +(state.selectedCat.weight + 0.1).toFixed(1)
       } else if(action.payload.actionType === 'meat') {
@@ -19,6 +25,11 @@ export const catSlice = createSlice({
       } else if(action.payload.actionType === 'work out') {
         state.selectedCat.weight = +(state.selectedCat.weight - 2).toFixed(1)
       }
+
+      console.log(state.random)
+      console.log(state.disabled)
+      state.selectedCat.history.push(action.payload)
+
 
       if(state.selectedCat.history.length % 3 === 0){
         state.selectedCat.age += 1
@@ -44,6 +55,9 @@ export const catSlice = createSlice({
     handleSelectedCat: (state, action) => {
       state.selectedCat = state.cats.find(cat => cat.id === action.payload)
     },
+    // hadleDisabled: (state, action) => {
+    //   state.
+    // }
   }
 })
 
