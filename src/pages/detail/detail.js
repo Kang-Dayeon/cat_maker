@@ -6,7 +6,7 @@ import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
-import {handleSelectedCat, addHistory} from '../../redux/cats'
+import {handleSelectedCat, addHistory, handleDisabled} from '../../redux/cats'
 // fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
@@ -23,15 +23,14 @@ const Detail = () => {
 
   const cats = useSelector(state => state.cats.cats)
   const selectedCat = useSelector(state => state.cats.selectedCat)
-  // const disabled = useSelector(state => state.cats.disabled)
   const user = useSelector(state => state.user.loginUser)
+  // const disabled = useSelector(state => state.selectedCat.disabled)
 
   const addEating = (actionType) => {
     dispatch(addHistory({
       type: 'eat',
       dates: new Date().toLocaleString(),
-      actionType,
-      disabled: false
+      actionType
     }))
   }
 
@@ -42,7 +41,14 @@ const Detail = () => {
       navigate('/')
     }
   })
+  // console.log(selectedCat)
 
+  // useEffect(() => {
+  //   if(selectedCat.disabled){
+  //     dispatch(handleDisabled(parseInt(params.key)))
+  //   }
+  //   console.log(selectedCat.disabled)
+  // })
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨

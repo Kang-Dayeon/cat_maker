@@ -14,8 +14,7 @@ export const cats = [
     age: 1,
     weight: 1,
     state: catStatus.state2,
-    fat: false,
-    death: false,
+    disabled: false,
     history: [],
     messageNum: 0,
     messages: [
@@ -37,8 +36,7 @@ export const cats = [
     age: 1,
     weight: 1,
     state: catStatus.state2,
-    fat: false,
-    death: false,
+    disabled: false,
     history: [],
     messageNum: 0,
     messages: [
@@ -60,8 +58,7 @@ export const cats = [
     age: 1,
     weight: 1,
     state: catStatus.state2,
-    fat: false,
-    death: false,
+    disabled: false,
     history: [],
     messageNum: 0,
     messages: [

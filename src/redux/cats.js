@@ -14,21 +14,21 @@ export const catSlice = createSlice({
 
       if(state.random > 5) {
         state.selectedCat.disabled = true
-      }
-      setTimeout(() => state.selectedCat.disabled = true, 5000)
-      if(action.payload.actionType === 'water') {
-        state.selectedCat.weight = +(state.selectedCat.weight + 0.1).toFixed(1)
-      } else if(action.payload.actionType === 'meat') {
-        state.selectedCat.weight += 3
-      } else if(action.payload.actionType === 'feed') {
-        state.selectedCat.weight += 1
-      } else if(action.payload.actionType === 'work out') {
-        state.selectedCat.weight = +(state.selectedCat.weight - 2).toFixed(1)
+      } else {
+        state.selectedCat.history.push(action.payload)
+        if(action.payload.actionType === 'water') {
+          state.selectedCat.weight = +(state.selectedCat.weight + 0.1).toFixed(1)
+        } else if(action.payload.actionType === 'meat') {
+          state.selectedCat.weight += 3
+        } else if(action.payload.actionType === 'feed') {
+          state.selectedCat.weight += 1
+        } else if(action.payload.actionType === 'work out') {
+          state.selectedCat.weight = +(state.selectedCat.weight - 2).toFixed(1)
+        }
       }
 
       console.log(state.random)
       console.log(state.disabled)
-      state.selectedCat.history.push(action.payload)
 
 
       if(state.selectedCat.history.length % 3 === 0){
@@ -55,12 +55,17 @@ export const catSlice = createSlice({
     handleSelectedCat: (state, action) => {
       state.selectedCat = state.cats.find(cat => cat.id === action.payload)
     },
-    // hadleDisabled: (state, action) => {
-    //   state.
+    // handleDisabled: (state, action) => {
+    //   if(state.selectedCat.disabled){
+    //     setTimeout(() => {
+    //       state.selectedCat.disabled = true
+    //     }, 5000)
+    //   }
+    //   state.selectedCat = state.cats.find(cat => cat.id === action.payload)
     // }
   }
 })
 
-export const { addHistory, handleSelectedCat } = catSlice.actions
+export const { addHistory, handleSelectedCat, handleDisabled } = catSlice.actions
 export default catSlice.reducer
 
