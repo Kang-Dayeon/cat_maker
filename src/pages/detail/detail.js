@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, {useEffect} from 'react'
+import {useParams, useNavigate} from 'react-router-dom'
 import '../../App.css'
 //component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 // redux
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
-import { handleSelectedCat } from '../../redux/cats'
+import {useDispatch, useSelector} from 'react-redux'
+import {handleSelectedCat, addHistory} from '../../redux/cats'
 // fontawesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBottleWater, faDrumstickBite, faBowlRice } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {
+  faBottleWater,
+  faDrumstickBite,
+  faBowlRice,
+  faDumbbell,
+} from '@fortawesome/free-solid-svg-icons'
 
 const Detail = () => {
   const params = useParams()
@@ -20,60 +24,37 @@ const Detail = () => {
   const cats = useSelector(state => state.cats.cats)
   const selectedCat = useSelector(state => state.cats.selectedCat)
 
-  // console.log(cats.find(cat => cat.id === Number(params.key)))
-  // console.log(dispatch(handleSelectedCat(parseInt(params.key))))
-
-  // const date = new Date()
-  // const currentDate = date.getFullYear()+'년'+(date.getMonth()+1)+'월'+date.getDate()+'일 '+date.getHours()+'시'+date.getMinutes()+'분'+date.getSeconds()+'초'
-
-  // const increases = () => {
-  //   dispatch(increaseCount(id, props.cat[id].weight + 0.5, currentDate, props.cat[id].age))
-  // }
+  const addEating = (actionType) => {
+    dispatch(addHistory({
+      type: 'eat',
+      dates: new Date().toLocaleString(),
+      actionType,
+    }))
+  }
 
   useEffect(() => {
-    if (params.key && cats.find(cat => cat.id === parseInt(params.key))){
+    if (params.key && cats.find(cat => cat.id === parseInt(params.key))) {
       dispatch(handleSelectedCat(parseInt(params.key)))
-      console.log(params)
     } else {
       navigate('/')
     }
   })
 
-  // useEffect(() => {
-  //   if(selectedCat.weight >= 30){
-  //     dispatch(handleBodyState(id, props.cat[id].fat = true))
-  //   }
-  // },[props.cat[id].weight])
-  //
-  // useEffect(() => {
-  //   if(props.cat[id].age >= 15){
-  //     dispatch(handleLifeState(id, props.cat[id].death = true))
-  //   }
-  //   if(props.cat[id].age % 3 === 0 || props.cat[id].age === 1){
-  //     dispatch(messageNum(id, props.cat[id].messageNum + 1))
-  //   }
-  // }, [props.cat[id].age])
-  //
-  // useEffect(() => {
-  //   dispatch(messageAdd(id, props.cat[id].messages.slice(0,props.cat[id].messageNum)))
-  // }, [props.cat[id].messageNum])
-
-  if (!selectedCat) return;
+  if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
 
   return (
     <div className="detail">
       <div className="detail_profile">
         <div className="detail_img img">
-          <img src={selectedCat.death ? selectedCat.dieImage : selectedCat.image} />
+          <img alt="cat profile"
+            src={selectedCat.state === 'Death' ?
+            selectedCat.dieImage :
+            selectedCat.image}/>
         </div>
         <div className="detail_text">
           <h3 className="detail_name">{selectedCat.name}</h3>
-          {
-            selectedCat.fat && ! selectedCat.death ? <Badge color={'#E33D64'}>Fatness</Badge> :
-              selectedCat.death ? <Badge color={'#000'}>Death</Badge> :
-            <Badge>Normal</Badge>
-          }
+          <Badge state={selectedCat.state}>{selectedCat.state}</Badge>
         </div>
       </div>
       <div className="detail_info">
@@ -93,12 +74,73 @@ const Detail = () => {
         </ul>
         <div className="add_text">
           <div className="time">
-            <h4>[ Meal Time ]</h4>
             <ul>
+              <li className="time_section">
+                <h4>[ First Time ]</h4>
+                <p>
+                  <span>
+                    {
+                      selectedCat.history.length === 0 ? '' :
+                        selectedCat.history[0].actionType === 'water' ?
+                          <FontAwesomeIcon icon={faBottleWater}/> :
+                          selectedCat.history[0].actionType === 'meat' ?
+                            <FontAwesomeIcon icon={faDrumstickBite}/> :
+                            selectedCat.history[0].actionType === 'feed' ?
+                              <FontAwesomeIcon icon={faBowlRice}/> :
+                              selectedCat.history[0].actionType === 'work out' ?
+                                <FontAwesomeIcon icon={faDumbbell}/> :
+                                ''
+                    }
+                  </span>
+                  {selectedCat.history.length > 0 ?
+                    selectedCat.history[0].dates :
+                    ''}
+                </p>
+              </li>
+              <li className="time_section">
+                <h4>[ Last Time ]</h4>
+                <p>
+                  <span>
+                    {
+                      selectedCat.history.length === 0 ? '' :
+                        selectedCat.history[selectedCat.history.length -
+                        1].actionType === 'water' ?
+                          <FontAwesomeIcon icon={faBottleWater}/> :
+                          selectedCat.history[selectedCat.history.length -
+                          1].actionType === 'meat' ?
+                            <FontAwesomeIcon icon={faDrumstickBite}/> :
+                            selectedCat.history[selectedCat.history.length -
+                            1].actionType === 'feed' ?
+                              <FontAwesomeIcon icon={faBowlRice}/> :
+                              selectedCat.history[selectedCat.history.length -
+                              1].actionType === 'work out' ?
+                                <FontAwesomeIcon icon={faDumbbell}/> :
+                                ''
+                    }
+                  </span>
+                  {selectedCat.history.length > 0 ?
+                    selectedCat.history[selectedCat.history.length - 1].dates :
+                    ''}
+                </p>
+              </li>
+              <li><h3>[ Timeline ]</h3></li>
               {
-                selectedCat.dates.map((item) => {
+                selectedCat.history.map((item, i) => {
                   return (
-                    <li>{item}</li>
+                    <li>
+                      <span>
+                        {
+                          item.actionType === 'water' ?
+                            <FontAwesomeIcon icon={faBottleWater}/> :
+                            item.actionType === 'meat' ?
+                              <FontAwesomeIcon icon={faDrumstickBite}/> :
+                              item.actionType === 'feed' ?
+                                <FontAwesomeIcon icon={faBowlRice}/> :
+                                <FontAwesomeIcon icon={faDumbbell}/>
+                        }
+                      </span>
+                      {item.dates}
+                    </li>
                   )
                 })
               }
@@ -108,7 +150,7 @@ const Detail = () => {
             <h4>[ Message ]</h4>
             <ul>
               {
-                selectedCat.message.map((item) => {
+                selectedCat.message.map((item, i) => {
                   return (
                     <li>{item}</li>
                   )
@@ -117,14 +159,34 @@ const Detail = () => {
             </ul>
           </div>
         </div>
-        <Button food={'Water'}><FontAwesomeIcon icon={faBottleWater} size="lg" /></Button>
-        <Button food={'Meat'}><FontAwesomeIcon icon={faDrumstickBite} /></Button>
-        <Button food={'Feed'}><FontAwesomeIcon icon={faBowlRice} /></Button>
-        {/* {
-          selectedCat.death ?
-          <Button color={"#8f9da9"} cursor={'default'} disabled>Death</Button> :
-          <Button >Give Food</Button>
-        } */}
+        <Button
+          action={'Water'}
+          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          onClick={() => addEating('water')}
+        >
+          <FontAwesomeIcon icon={faBottleWater}/>
+        </Button>
+        <Button
+          action={'Meat'}
+          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          onClick={() => addEating('meat')}
+        >
+          <FontAwesomeIcon icon={faDrumstickBite}/>
+        </Button>
+        <Button
+          action={'Feed'}
+          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          onClick={() => addEating('feed')}
+        >
+          <FontAwesomeIcon icon={faBowlRice}/>
+        </Button>
+        <Button
+          action={'work out'}
+          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          onClick={() => addEating('work out')}
+        >
+          <FontAwesomeIcon icon={faDumbbell}/>
+        </Button>
       </div>
     </div>
   )

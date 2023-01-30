@@ -6,11 +6,35 @@ export const catSlice = createSlice({
   initialState: {
     cats: data.cats,
     selectedCat: null,
-    food: data.food
   },
   reducers: {
     addHistory: (state, action) => {
-      state.selectedCat.dates.push(action.payload)
+      state.selectedCat.history.push(action.payload)
+      if(action.payload.actionType === 'water') {
+        state.selectedCat.weight = +(state.selectedCat.weight + 0.1).toFixed(1)
+      } else if(action.payload.actionType === 'meat') {
+        state.selectedCat.weight += 3
+      } else if(action.payload.actionType === 'feed') {
+        state.selectedCat.weight += 1
+      } else if(action.payload.actionType === 'work out') {
+        state.selectedCat.weight = +(state.selectedCat.weight - 2).toFixed(1)
+      }
+
+      if(state.selectedCat.history.length % 3 === 0){
+        state.selectedCat.age += 1
+      }
+
+      if(state.selectedCat.weight < 1){
+        state.selectedCat.state = data.catStatus.state1
+      } else if(state.selectedCat.weight < 30){
+        state.selectedCat.state = data.catStatus.state2
+      } else if(state.selectedCat.weight >= 30){
+        state.selectedCat.state = data.catStatus.state3
+      }
+
+      if(state.selectedCat.age >= 15 || state.selectedCat.age * 0.1 > state.selectedCat.weight){
+        state.selectedCat.state = data.catStatus.state4
+      }
 
       state.cats = [
         ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
@@ -20,67 +44,9 @@ export const catSlice = createSlice({
     handleSelectedCat: (state, action) => {
       state.selectedCat = state.cats.find(cat => cat.id === action.payload)
     },
-    giveFood: (state,action) => {
-
-    }
   }
 })
 
 export const { addHistory, handleSelectedCat } = catSlice.actions
 export default catSlice.reducer
-//
-// export const INCREASE = 'INCREASE'
-// export const LIFE = 'STATE/LIFE'
-// export const BODY = 'STATE/BODY'
-// export const COUNT = 'MESSAGE/COUNT'
-// export const ADDMESSAGE = 'MESSAGE/ADDMESSAGE'
-//
-// export const increaseCount = (currentId, currentWeight, date, currentAge) => ({ type: INCREASE, currentId, currentWeight, date, currentAge});
-// export const handleLifeState = (currentId, currentLifeState) => ({type: LIFE, currentId, currentLifeState})
-// export const handleBodyState = (currentId, currentBodyState) => ({type: BODY, currentId, currentBodyState})
-// export const messageNum = (currentId, currentNum) => ({type: COUNT, currentId,  currentNum})
-// export const messageAdd = (currentId, message) => ({type: ADDMESSAGE, currentId,  message})
-//
-// const initialState = {
-//   cats: data.cats,
-//   selectedCat: null
-// }
-//
-// const reducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case INCREASE:
-//       state[action.currentId].weight = action.currentWeight
-//       state[action.currentId].date.push(action.date)
-//       if(state[action.currentId].weight % 3 === 0 && state[action.currentId].weight <= 42){
-//         state[action.currentId].age = action.currentAge + 1
-//       }
-//       return[
-//         ...state
-//       ]
-//     case LIFE:
-//       state[action.currentId].death = action.currentLifeState
-//       return[
-//         ...state
-//       ]
-//     case BODY:
-//       state[action.currentId].fat = action.currentBodyState
-//       return[
-//         ...state
-//       ]
-//     case COUNT:
-//       state[action.currentId].messageNum = action.currentNum
-//       return[
-//         ...state
-//       ]
-//     case ADDMESSAGE:
-//       state[action.currentId].message = action.message
-//       return[
-//         ...state
-//       ]
-//     default:
-//       return state;
-//   }
-// };
-
-// export default reducer
 

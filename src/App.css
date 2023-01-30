@@ -19,7 +19,6 @@ a:hover{
 img{
     width: 100%;
 }
-/*rayouts*/
 
 .img{
     border-radius: 50%;
@@ -69,16 +68,10 @@ img{
     -webkit-box-shadow: 3px 3px 5px 0 rgba(0,0,0,0.1);
     box-shadow: 3px 3px 5px 0 rgba(0,0,0,0.1);
 }
-/*.profile .badge{*/
-/*    position: static;*/
-/*    right: 22%;*/
-/*    top: 12%;*/
-/*}*/
 .profile_img{
     width: 160px;
     height: 150px;
 }
-
 .profile_name{
     margin-top: 10px;
     font-size: 22px;
@@ -141,7 +134,7 @@ img{
 
 .detail_info{
     margin-left: 50px;
-    width: 50%;
+    width: 60%;
 }
 .detail_info .profile_state{
     padding: 20px 0;
@@ -186,17 +179,29 @@ img{
 .add_text div{
     width: 50%;
 }
-.add_text h4{
+.message h4{
+    margin-bottom: 10px;
+    font-size: 18px;
     color: #5b608c;
 }
-.add_text ul{
-    margin-top: 10px;
+.add_text ul li h4{
+    font-size: 18px;
 }
 .add_text li{
     font-size: 14px;
     font-weight: bold;
     line-height: 1.5;
     color: #5b608c;
+}
+.add_text li span {
+    display: inline-block;
+    margin-right: 7px;
+    min-width: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+.time_section{
+    margin-bottom: 10px;
 }
 @media (max-width: 1050px){
     .content{

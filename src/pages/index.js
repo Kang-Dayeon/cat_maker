@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux'
 
 const Index = () => {
   const cats = useSelector(state => state.cats.cats)
+  console.log(cats)
   return (
     <>
       {
-        cats.map((item,i) => {
-          return <Profile cat={item} key={i} />
+        cats.map((item, i) => {
+          return <Profile cat={item} key={i}/>
         })
       }
     </>

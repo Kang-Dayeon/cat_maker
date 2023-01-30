@@ -4,11 +4,6 @@ export const catStatus = {
   state3: 'Fatness',
   state4: 'Death'
 }
-export const food = {
-  water: 'water',
-  meat: 'meat',
-  feed: 'feed',
-}
 export const cats = [
   {
     id: 0,
@@ -21,7 +16,7 @@ export const cats = [
     state: catStatus.state2,
     fat: false,
     death: false,
-    dates: [],
+    history: [],
     messageNum: 0,
     messages: [
       '잘 키워보시게',
@@ -44,7 +39,7 @@ export const cats = [
     state: catStatus.state2,
     fat: false,
     death: false,
-    dates: [],
+    history: [],
     messageNum: 0,
     messages: [
       '반갑냥',
@@ -67,7 +62,7 @@ export const cats = [
     state: catStatus.state2,
     fat: false,
     death: false,
-    dates: [],
+    history: [],
     messageNum: 0,
     messages: [
       '냥?',

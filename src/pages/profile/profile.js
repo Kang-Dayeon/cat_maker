@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import '../../App.css'
 //component
 import Button from '../../component/Button'
@@ -14,10 +14,10 @@ const Profile = (props) => {
   }
   return (
     <div className="profile">
-      <div className={cats.fat && !cats.death ? 'profile_img img fat' :
-        cats.death ? 'profile_img img death' :
-        'profile_img img'}>
-        <img src={cats.death ? cats.dieImage : cats.image} />
+      <div className={cats.state === 'Fatness' ? 'profile_img img fat' :
+        cats.state === 'Death' ? 'profile_img img death' : 'profile_img img'}>
+        <img alt="cat profile"
+             src={cats.state === 'Death' ? cats.dieImage : cats.image}/>
       </div>
       <div className="profile_text">
         <p className="profile_name">{cats.name}</p>
@@ -33,28 +33,18 @@ const Profile = (props) => {
           <p className="state_name">Weight</p>
         </li>
       </ul>
-      {
-        cats.fat && !cats.death ?
-          <Badge
-            color={'#E33D64'}
-            position={'absolute'}
-            right={'22%'}
-            top={'12%'}
-          >Fatness</Badge> :
-          cats.death ?
-            <Badge
-              color={'#000'}
-              position={'absolute'}
-              right={'22%'}
-              top={'12%'}
-            >Death</Badge> :
-            <Badge
-              position={'absolute'}
-              right={'22%'}
-              top={'12%'}
-            >Normal</Badge>
-      }
-      <Button onClick={() => handleDetailNavigate(cats.id)}>View Profile</Button>
+      <Badge
+        state={cats.state}
+        position={'absolute'}
+        right={'22%'}
+        top={'12%'}
+      >{cats.state}</Badge>
+      <Button
+        disabled={cats.state === 'Death' ? 'disabled' : ''}
+        onClick={() => handleDetailNavigate(cats.id)}
+      >
+        View Profile
+      </Button>
     </div>
   )
 }
