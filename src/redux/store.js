@@ -1,10 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit'
-import catReducer from './cats'
-import userReducer from './login'
+import {persistReducer} from 'redux-persist'
+import rootReducer from './rootReducer'
+import storage from 'redux-persist/lib/storage'
 
-export default configureStore({
-  reducer: {
-    cats: catReducer,
-    user: userReducer
-  }
+const persistConfig = {
+  key: 'root',
+  storage
+}
+
+const reducer = persistReducer(persistConfig, rootReducer)
+
+const store = configureStore({
+  reducer
 })
+
+export { store }

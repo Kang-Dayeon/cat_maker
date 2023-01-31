@@ -7,7 +7,7 @@ import Login from './login/login'
 const Index = () => {
   const isLogin = useSelector(state => state.user.isLogin)
 
-  const cats = useSelector(state => state.cats.cats)
+  const cats = useSelector(state => state.cat.cats)
   return (
     <>
       {

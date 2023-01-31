@@ -21,9 +21,9 @@ const Detail = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const cats = useSelector(state => state.cats.cats)
-  const selectedCat = useSelector(state => state.cats.selectedCat)
-  const randomEating = useSelector(state => state.cats.randomEating)
+  const cats = useSelector(state => state.cat.cats)
+  const selectedCat = useSelector(state => state.cat.selectedCat)
+  const randomEating = useSelector(state => state.cat.randomEating)
   const user = useSelector(state => state.user.loginUser)
 
   const addEating = (actionType) => {

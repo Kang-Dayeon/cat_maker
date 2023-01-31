@@ -1,10 +1,10 @@
+import cat from './cats'
+import user from './login'
 import {combineReducers} from 'redux'
-import reducer from './cats'
-import loginReducer from './login'
 
 const rootReducer = combineReducers({
-  reducer,
-  loginReducer
+  cat,
+  user
 })
 
 export default rootReducer
