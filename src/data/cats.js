@@ -16,7 +16,8 @@ export const cats = [
     state: catStatus.state2,
     disabled: false,
     history: [],
-    messageNum: 0,
+    eating: 0,
+    messageLength: 1,
     messages: [
       '잘 키워보시게',
       '밥줘!!!',
@@ -25,7 +26,7 @@ export const cats = [
       '이제 움직이기 힘들다옹',
       '그동안 고마웠...😇'
     ],
-    message:[]
+    message: []
   },
   {
     id: 1,
@@ -38,7 +39,8 @@ export const cats = [
     state: catStatus.state2,
     disabled: false,
     history: [],
-    messageNum: 0,
+    eating: 0,
+    messageLength: 1,
     messages: [
       '반갑냥',
       '밥이 부족해.....',
@@ -47,7 +49,7 @@ export const cats = [
       '귀찮아...',
       '...😇'
     ],
-    message:[]
+    message: []
   },
   {
     id: 2,
@@ -60,7 +62,8 @@ export const cats = [
     state: catStatus.state2,
     disabled: false,
     history: [],
-    messageNum: 0,
+    eating: 0,
+    messageLength: 1,
     messages: [
       '냥?',
       '냥얀😻',
@@ -69,6 +72,6 @@ export const cats = [
       '이제 그만....',
       '죽여줘...🙀‍'
     ],
-    message:[]
+    message: []
   }
 ]

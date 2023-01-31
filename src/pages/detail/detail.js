@@ -23,14 +23,14 @@ const Detail = () => {
 
   const cats = useSelector(state => state.cats.cats)
   const selectedCat = useSelector(state => state.cats.selectedCat)
+  const randomEating = useSelector(state => state.cats.randomEating)
   const user = useSelector(state => state.user.loginUser)
-  // const disabled = useSelector(state => state.selectedCat.disabled)
 
   const addEating = (actionType) => {
     dispatch(addHistory({
       type: 'eat',
-      dates: new Date().toLocaleString(),
-      actionType
+      timeLine: new Date().toLocaleString() + ' '+user.name,
+      actionType,
     }))
   }
 
@@ -41,14 +41,19 @@ const Detail = () => {
       navigate('/')
     }
   })
-  // console.log(selectedCat)
 
-  // useEffect(() => {
-  //   if(selectedCat.disabled){
-  //     dispatch(handleDisabled(parseInt(params.key)))
-  //   }
-  //   console.log(selectedCat.disabled)
-  // })
+  useEffect(() => {
+    if(randomEating >= 9){
+      setTimeout(() => {
+        dispatch(handleDisabled())
+      }, randomEating * 1000)
+    } else if (randomEating === 11){
+      console.log(randomEating)
+      setTimeout(() => {
+        dispatch(handleDisabled())
+      }, 10000)
+    }
+  },[randomEating])
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
@@ -103,8 +108,8 @@ const Detail = () => {
                     }
                   </span>
                   {selectedCat.history.length > 0 ?
-                    selectedCat.history[0].dates :
-                    ''} {user.name}
+                    selectedCat.history[0].timeLine :
+                    ''}
                 </p>
               </li>
               <li className="time_section">
@@ -129,8 +134,8 @@ const Detail = () => {
                     }
                   </span>
                   {selectedCat.history.length > 0 ?
-                    selectedCat.history[selectedCat.history.length - 1].dates :
-                    ''} {user.name}
+                    selectedCat.history[selectedCat.history.length - 1].timeLine :
+                    ''}
                 </p>
               </li>
               <li><h3>[ Timeline ]</h3></li>
@@ -149,7 +154,7 @@ const Detail = () => {
                                 <FontAwesomeIcon icon={faDumbbell}/>
                         }
                       </span>
-                      {item.dates}  {user.name}
+                      {item.timeLine}
                     </li>
                   )
                 })
@@ -192,7 +197,7 @@ const Detail = () => {
         </Button>
         <Button
           action={'work out'}
-          disabled={selectedCat.state === 'Death' ? 'disabled' : ''}
+          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
           onClick={() => addEating('work out')}
         >
           <FontAwesomeIcon icon={faDumbbell}/>

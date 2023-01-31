@@ -34,7 +34,6 @@ const RoundButton = styled.button`
       cursor: default;
       opacity: 0.5;
     }
-    
   `
 
 const Button = ({children, color, cursor, onClick, action, disabled}) => {
