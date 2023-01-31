@@ -6,7 +6,7 @@ import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
 import {PersistGate} from 'redux-persist/integration/react'
 
-const persistor = persistStore(store)
+export const persistor = persistStore(store)
 
 function App() {
   return (

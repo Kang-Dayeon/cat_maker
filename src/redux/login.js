@@ -1,5 +1,6 @@
 import { userList } from '../data/user'
 import { createSlice } from '@reduxjs/toolkit'
+import {PURGE} from 'redux-persist'
 
 export const userSlice = createSlice({
   name: 'user',
@@ -21,9 +22,15 @@ export const userSlice = createSlice({
       if(state.loginUser !== null){
         state.isLogin = true
       }
-    }
+    },
+    logout: (state, action) => {
+      state.isLogin = false
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, (initialState) => customElements.removeAll(initialState));
   }
 })
 
-export const { login } = userSlice.actions
+export const { login, logout } = userSlice.actions
 export default userSlice.reducer

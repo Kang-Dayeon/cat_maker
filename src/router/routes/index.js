@@ -1,11 +1,10 @@
-import {Route, Routes, useNavigate} from 'react-router-dom'
-import React, {useEffect} from 'react'
+import {Route, Routes} from 'react-router-dom'
+import React from 'react'
 import Index from '../../pages'
 import Detail from '../../pages/detail/detail'
 import Login from '../../pages/login/login'
 import Header from '../../rayouts/header'
 import '../../App.css'
-import {useSelector} from 'react-redux'
 
 const Routers = () => {
 

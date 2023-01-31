@@ -1,5 +1,6 @@
 import * as data from '../data/cats'
 import { createSlice } from '@reduxjs/toolkit'
+import {PURGE} from 'redux-persist'
 
 export const catSlice = createSlice({
   name: 'cat',
@@ -72,6 +73,9 @@ export const catSlice = createSlice({
         state.selectedCat
       ]
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, (initialState) => customElements.removeAll(initialState));
   }
 })
 

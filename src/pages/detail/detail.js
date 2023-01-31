@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect,useState} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import '../../App.css'
 //component
@@ -26,6 +26,8 @@ const Detail = () => {
   const randomEating = useSelector(state => state.cat.randomEating)
   const user = useSelector(state => state.user.loginUser)
 
+  // const [timer, setTimer] = useState(10)
+
   const addEating = (actionType) => {
     dispatch(addHistory({
       type: 'eat',
@@ -52,6 +54,10 @@ const Detail = () => {
       setTimeout(() => {
         dispatch(handleDisabled())
       }, 10000)
+      // const countDown = setInterval(() =>{
+      //   setTimer(timer - 1)
+      // }, 1000)
+      // return () => clearInterval(countDown)
     }
   },[randomEating])
 
@@ -174,34 +180,42 @@ const Detail = () => {
             </ul>
           </div>
         </div>
-        <Button
-          action={'Water'}
-          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-          onClick={() => addEating('water')}
-        >
-          <FontAwesomeIcon icon={faBottleWater}/>
-        </Button>
-        <Button
-          action={'Meat'}
-          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-          onClick={() => addEating('meat')}
-        >
-          <FontAwesomeIcon icon={faDrumstickBite}/>
-        </Button>
-        <Button
-          action={'Feed'}
-          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-          onClick={() => addEating('feed')}
-        >
-          <FontAwesomeIcon icon={faBowlRice}/>
-        </Button>
-        <Button
-          action={'work out'}
-          disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-          onClick={() => addEating('work out')}
-        >
-          <FontAwesomeIcon icon={faDumbbell}/>
-        </Button>
+        <div className="button__wrap">
+          <Button
+            action={'Water'}
+            disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
+            onClick={() => addEating('water')}
+          >
+            <FontAwesomeIcon icon={faBottleWater}/>
+          </Button>
+          <Button
+            action={'Meat'}
+            disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
+            onClick={() => addEating('meat')}
+          >
+            <FontAwesomeIcon icon={faDrumstickBite}/>
+          </Button>
+          <Button
+            action={'Feed'}
+            disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
+            onClick={() => addEating('feed')}
+          >
+            <FontAwesomeIcon icon={faBowlRice}/>
+          </Button>
+          <div className="timer__wrap">
+            {/*<Timer work={selectedCat.workOut}>*/}
+            {/*  <span className="timer__text">{timer}</span>*/}
+            {/*</Timer>*/}
+            <Button
+              action={'work out'}
+              disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
+              onClick={() => addEating('work out')}
+            >
+              <FontAwesomeIcon icon={faDumbbell}/>
+            </Button>
+        </div>
+        </div>
+
       </div>
     </div>
   )

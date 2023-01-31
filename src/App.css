@@ -53,6 +53,11 @@ img{
     justify-content: center;
     align-items: center;
 }
+.button__wrap{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 /*profile*/
 .profile{
     position: relative;
@@ -86,7 +91,7 @@ img{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin: 10px 0 0;
 }
 .profile_state li{
     width: 50px;
@@ -228,6 +233,43 @@ img{
     font-size: 14px;
     border-radius: 5px;
     border: none;
+}
+/*timer*/
+.timer{
+    display: none;
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    padding: 3px 10px;
+    border-radius: 30%;
+    background-color: #5b608c;
+    transform: translateX(-50%);
+}
+.timer__wrap{
+    position: relative;
+}
+.timer.block{
+    display: block;
+}
+.timer__text{
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    font-size: 12px;
+}
+.timer__text::after{
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    z-index: 10;
+    width: 0;
+    height: 0;
+    border-top: 8px solid #5b608c;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid transparent;
+    transform: translateX(-50%);
+    content: '';
 }
 @media (max-width: 1050px){
     .content{
