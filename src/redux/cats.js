@@ -1,4 +1,4 @@
-import * as data from '../data/cats'
+import * as data from '../database/cats'
 import {createSlice} from '@reduxjs/toolkit'
 import {PURGE} from 'redux-persist'
 
@@ -10,9 +10,7 @@ export const catSlice = createSlice({
   },
   //todos: 리듀서 하나당 하나의 기능만
   reducers: {
-    addHistory: (state, action) => {
-      state.selectedCat.history.push(action.payload)
-
+    upDateData: (state) => {
       state.cats = [
         ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
         state.selectedCat,
@@ -21,41 +19,29 @@ export const catSlice = createSlice({
     handleSelectedCat: (state, action) => {
       state.selectedCat = state.cats.find(cat => cat.id === action.payload)
     },
+    addHistory: (state, action) => {
+      state.selectedCat.history.push(action.payload)
+    },
     // weight
     handleWeight: (state, action) => {
       state.selectedCat.weight = action.payload
-      state.cats = [
-        ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
-        state.selectedCat,
-      ]
     },
     // age
     handleAge: (state, action) => {
       state.selectedCat.age += action.payload
-      state.cats = [
-        ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
-        state.selectedCat,
-      ]
     },
     // state
     handleState: (state) => {
-      state.selectedCat.state = (state.selectedCat.weight < 1) ? data.catStatus.state1 :
+      state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight > 0)) ? data.catStatus.state1 :
         (state.selectedCat.weight < 30) ? data.catStatus.state2 :
-          ((state.selectedCat.age >= 15) || (state.selectedCat.age * 0.1 > state.selectedCat.weight)) ? data.catStatus.state4 :
+           (state.selectedCat.age >= 15) || (state.selectedCat.age * 0.1 > state.selectedCat.weight)  ? data.catStatus.state4 :
             data.catStatus.state3
 
-      state.cats = [
-        ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
-        state.selectedCat,
-      ]
+      console.log(state.selectedCat.age * 0.1)
     },
     // message
     addMessage: (state, action) => {
       state.selectedCat.message = state.selectedCat.messages.slice(0, action.payload)
-      state.cats = [
-        ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
-        state.selectedCat,
-      ]
     },
   },
   extraReducers: (builder) => {
@@ -69,7 +55,8 @@ export const {
   handleWeight,
   handleAge,
   handleState,
-  addMessage
+  addMessage,
+  upDateData
 } = catSlice.actions
 export default catSlice.reducer
 

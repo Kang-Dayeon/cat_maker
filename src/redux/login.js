@@ -1,4 +1,4 @@
-import { users } from '../data/users'
+import { users } from '../database/users'
 import { createSlice } from '@reduxjs/toolkit'
 import {PURGE} from 'redux-persist'
 

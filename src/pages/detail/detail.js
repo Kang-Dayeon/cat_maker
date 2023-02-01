@@ -4,6 +4,7 @@ import '../../App.css'
 //component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
+import Timer from '../../component/Timer'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
 import {
@@ -12,7 +13,8 @@ import {
   handleWeight,
   handleAge,
   handleState,
-  addMessage
+  addMessage,
+  upDateData
 } from '../../redux/cats'
 // fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -22,7 +24,7 @@ import {
   faBowlRice,
   faDumbbell,
 } from '@fortawesome/free-solid-svg-icons'
-import * as data from '../../data/cats'
+import useInterval from '../../hooks/useInterval'
 
 const Detail = () => {
   const params = useParams()
@@ -37,14 +39,15 @@ const Detail = () => {
   const [eating, setEating] = useState(0)
   const [random, setRandom] = useState(0)
   const [disabled, setDisabled] = useState(false)
-  // const [timer, setTimer] = useState(10)
+  const [timer, setTimer] = useState(10)
   const catAge = selectedCat ? selectedCat.age : 0
+  const [work, setWork] = useState(false)
 
   // function
   const counter = (actionType) => {
     actionWatcher(actionType)
     disabledCheck(actionType)
-    dispatch(handleState())
+
   }
 
   // dispatch reducer
@@ -74,11 +77,14 @@ const Detail = () => {
       timeLine(actionType)
       dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
     }
+    dispatch(handleState())
   }
   // 비활성화
   const disabledCheck = (actionType) => {
     if(random >= 7 || actionType === 'work out'){
       setDisabled(true)
+      setWork(true)
+      disabledCheckOut(actionType)
     }
   }
   //비활성화 풀기
@@ -86,6 +92,7 @@ const Detail = () => {
     if(actionType === 'work out'){
       setTimeout(() => {
         setDisabled(false)
+        setWork(false)
       }, 10000)
     } else {
       setTimeout(() => {
@@ -93,6 +100,25 @@ const Detail = () => {
       }, random * 1000)
     }
   }
+  // const interval = () => {
+  //   setInterval(() => {
+  //     if(work){
+  //       setTimer(timer => timer - 1)
+  //       console.log(timer)
+  //     } else {
+  //       console.log('stop')
+  //       clearInterval(interval)
+  //     }
+  //   }, 1000)
+  // }
+
+  useEffect(() => {
+    // interval()
+  }, [work])
+
+  console.log(work)
+
+
 
   //useEffect
   useEffect(() => {
@@ -102,11 +128,6 @@ const Detail = () => {
       navigate('/')
     }
   },[params])
-
-  // 버튼 비활성화
-  useEffect(() => {
-    disabledCheckOut()
-  },[disabled])
 
   // 메세지 추가
   useEffect(() => {
@@ -122,7 +143,9 @@ const Detail = () => {
     }
   }, [eating])
 
-  console.log(eating)
+  useEffect(() => {
+    dispatch(upDateData())
+  }, [selectedCat])
 
 
   if (!selectedCat) return
@@ -267,9 +290,9 @@ const Detail = () => {
             <FontAwesomeIcon icon={faBowlRice}/>
           </Button>
           <div className="timer__wrap">
-            {/*<Timer work={selectedCat.workOut}>*/}
-            {/*  <span className="timer__text">{timer}</span>*/}
-            {/*</Timer>*/}
+            <Timer>
+              <span className="timer__text">{timer}</span>
+            </Timer>
             <Button
               action={'work out'}
               disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
