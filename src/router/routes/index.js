@@ -3,7 +3,7 @@ import React from 'react'
 import Index from '../../pages'
 import Detail from '../../pages/detail/detail'
 import Login from '../../pages/login/login'
-import Header from '../../rayouts/header'
+import Header from '../../layouts/header'
 import '../../App.css'
 
 const Routers = () => {

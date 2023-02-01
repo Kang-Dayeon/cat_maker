@@ -6,7 +6,14 @@ import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
-import {handleSelectedCat, addHistory, handleDisabled} from '../../redux/cats'
+import {
+  handleSelectedCat,
+  addHistory,
+  handleWeight,
+  handleAge,
+  handleState,
+  addMessage
+} from '../../redux/cats'
 // fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
@@ -15,6 +22,7 @@ import {
   faBowlRice,
   faDumbbell,
 } from '@fortawesome/free-solid-svg-icons'
+import * as data from '../../data/cats'
 
 const Detail = () => {
   const params = useParams()
@@ -23,12 +31,24 @@ const Detail = () => {
 
   const cats = useSelector(state => state.cat.cats)
   const selectedCat = useSelector(state => state.cat.selectedCat)
-  const randomEating = useSelector(state => state.cat.randomEating)
   const user = useSelector(state => state.user.loginUser)
 
+  // useStates
+  const [eating, setEating] = useState(0)
+  const [random, setRandom] = useState(0)
+  const [disabled, setDisabled] = useState(false)
   // const [timer, setTimer] = useState(10)
+  const catAge = selectedCat ? selectedCat.age : 0
 
-  const addEating = (actionType) => {
+  // function
+  const counter = (actionType) => {
+    actionWatcher(actionType)
+    disabledCheck(actionType)
+    dispatch(handleState())
+  }
+
+  // dispatch reducer
+  const timeLine = (actionType) => {
     dispatch(addHistory({
       type: 'eat',
       timeLine: new Date().toLocaleString() + ' '+user.name,
@@ -36,30 +56,74 @@ const Detail = () => {
     }))
   }
 
+  //action타입에 따른 상태변경
+  const actionWatcher = (actionType) => {
+    setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
+    if((random < 7) && actionType !== 'work out') {
+      timeLine(actionType)
+      setEating(eating + 1)
+      if(actionType === 'water'){
+        dispatch(handleWeight(+(selectedCat.weight + 0.1).toFixed(1) ))
+      } else if (actionType === 'meat'){
+        dispatch(handleWeight(selectedCat.weight + 3))
+      } else if (actionType === 'feed'){
+        dispatch(handleWeight(selectedCat.weight + 1))
+      }
+    }
+    if(actionType === 'work out'){
+      timeLine(actionType)
+      dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
+    }
+  }
+  // 비활성화
+  const disabledCheck = (actionType) => {
+    if(random >= 7 || actionType === 'work out'){
+      setDisabled(true)
+    }
+  }
+  //비활성화 풀기
+  const disabledCheckOut = (actionType) => {
+    if(actionType === 'work out'){
+      setTimeout(() => {
+        setDisabled(false)
+      }, 10000)
+    } else {
+      setTimeout(() => {
+        setDisabled(false)
+      }, random * 1000)
+    }
+  }
+
+  //useEffect
   useEffect(() => {
     if (params.key && cats.find(cat => cat.id === parseInt(params.key))) {
       dispatch(handleSelectedCat(parseInt(params.key)))
     } else {
       navigate('/')
     }
-  })
+  },[params])
 
+  // 버튼 비활성화
   useEffect(() => {
-    if(randomEating >= 9){
-      setTimeout(() => {
-        dispatch(handleDisabled())
-      }, randomEating * 1000)
-    } else if (randomEating === 11){
-      console.log(randomEating)
-      setTimeout(() => {
-        dispatch(handleDisabled())
-      }, 10000)
-      // const countDown = setInterval(() =>{
-      //   setTimer(timer - 1)
-      // }, 1000)
-      // return () => clearInterval(countDown)
+    disabledCheckOut()
+  },[disabled])
+
+  // 메세지 추가
+  useEffect(() => {
+    if(catAge % 3 === 0 || catAge !== 0){
+      dispatch(addMessage(Math.floor(catAge/3) + 1))
     }
-  },[randomEating])
+  }, [catAge])
+
+  // 나이먹기
+  useEffect(() => {
+    if((eating % 3 === 0) && (eating !== 0)){
+      dispatch(handleAge(1))
+    }
+  }, [eating])
+
+  console.log(eating)
+
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
@@ -183,22 +247,22 @@ const Detail = () => {
         <div className="button__wrap">
           <Button
             action={'Water'}
-            disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-            onClick={() => addEating('water')}
+            disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+            onClick={() => counter('water')}
           >
             <FontAwesomeIcon icon={faBottleWater}/>
           </Button>
           <Button
             action={'Meat'}
-            disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-            onClick={() => addEating('meat')}
+            disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+            onClick={() => counter('meat')}
           >
             <FontAwesomeIcon icon={faDrumstickBite}/>
           </Button>
           <Button
             action={'Feed'}
-            disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-            onClick={() => addEating('feed')}
+            disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+            onClick={() => counter('feed')}
           >
             <FontAwesomeIcon icon={faBowlRice}/>
           </Button>
@@ -208,8 +272,8 @@ const Detail = () => {
             {/*</Timer>*/}
             <Button
               action={'work out'}
-              disabled={selectedCat.state === 'Death' || selectedCat.disabled ? 'disabled' : ''}
-              onClick={() => addEating('work out')}
+              disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+              onClick={() => counter('work out')}
             >
               <FontAwesomeIcon icon={faDumbbell}/>
             </Button>
