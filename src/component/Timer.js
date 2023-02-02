@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const TimerStyled = styled.div`
     display: ${(props) => props.work ? 'block' : 'none'};
     position: absolute;
-    top: -35px;
+    top: ${(props) => props.top}px;
     left: 50%;
     padding: 3px 10px;
     border-radius: 30%;
@@ -12,9 +12,9 @@ const TimerStyled = styled.div`
     transform: translateX(-50%);
   `
 
-const Timer = ({work, children}) => {
+const Timer = ({top, work, children}) => {
   return (
-    <TimerStyled work={work}>{children}</TimerStyled>
+    <TimerStyled work={work} top={top}>{children}</TimerStyled>
   )
 }
 

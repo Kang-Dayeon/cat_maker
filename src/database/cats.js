@@ -15,7 +15,6 @@ export const cats = [
     weight: 1,
     state: catStatus.state2,
     history: [],
-    eating: 0,
     messageLength: 1,
     messages: [
       '잘 키워보시게',
@@ -37,7 +36,6 @@ export const cats = [
     weight: 1,
     state: catStatus.state2,
     history: [],
-    eating: 0,
     messageLength: 1,
     messages: [
       '반갑냥',
@@ -59,7 +57,6 @@ export const cats = [
     weight: 1,
     state: catStatus.state2,
     history: [],
-    eating: 0,
     messageLength: 1,
     messages: [
       '냥?',

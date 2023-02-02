@@ -121,6 +121,9 @@ img{
     background-color: #fff;
     border-radius: 20px;
 }
+.detail_profile{
+    position: relative;
+}
 .detail_img{
     width: 300px;
     height: 300px;

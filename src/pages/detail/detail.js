@@ -35,19 +35,27 @@ const Detail = () => {
   const selectedCat = useSelector(state => state.cat.selectedCat)
   const user = useSelector(state => state.user.loginUser)
 
+  const catAge = selectedCat ? selectedCat.age : 0
+
   // useStates
   const [eating, setEating] = useState(0)
   const [random, setRandom] = useState(0)
+  const [timer, setTimer] = useState(null)
+  const [delay, setDelay] = useState(null)
   const [disabled, setDisabled] = useState(false)
-  const [timer, setTimer] = useState(10)
-  const catAge = selectedCat ? selectedCat.age : 0
   const [work, setWork] = useState(false)
+  const [eat, setEat] = useState(false)
+
+  //custom hooks
+  useInterval(() => {
+    setTimer(timer - 1)
+  }, delay)
 
   // function
   const counter = (actionType) => {
     actionWatcher(actionType)
     disabledCheck(actionType)
-
+    dispatch(handleState())
   }
 
   // dispatch reducer
@@ -62,8 +70,8 @@ const Detail = () => {
   //action타입에 따른 상태변경
   const actionWatcher = (actionType) => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
+    timeLine(actionType)
     if((random < 7) && actionType !== 'work out') {
-      timeLine(actionType)
       setEating(eating + 1)
       if(actionType === 'water'){
         dispatch(handleWeight(+(selectedCat.weight + 0.1).toFixed(1) ))
@@ -74,17 +82,20 @@ const Detail = () => {
       }
     }
     if(actionType === 'work out'){
-      timeLine(actionType)
       dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
     }
-    dispatch(handleState())
   }
   // 비활성화
   const disabledCheck = (actionType) => {
-    if(random >= 7 || actionType === 'work out'){
+    if((random >= 7) || (actionType === 'work out')){
       setDisabled(true)
-      setWork(true)
+      setEat(true)
       disabledCheckOut(actionType)
+    }
+    if(actionType === 'work out'){
+      setWork(true)
+      setTimer(10)
+      setDelay(1000)
     }
   }
   //비활성화 풀기
@@ -93,32 +104,16 @@ const Detail = () => {
       setTimeout(() => {
         setDisabled(false)
         setWork(false)
+        setDelay(null)
       }, 10000)
+      setTimer(10)
     } else {
       setTimeout(() => {
         setDisabled(false)
+        setEat(false)
       }, random * 1000)
     }
   }
-  // const interval = () => {
-  //   setInterval(() => {
-  //     if(work){
-  //       setTimer(timer => timer - 1)
-  //       console.log(timer)
-  //     } else {
-  //       console.log('stop')
-  //       clearInterval(interval)
-  //     }
-  //   }, 1000)
-  // }
-
-  useEffect(() => {
-    // interval()
-  }, [work])
-
-  console.log(work)
-
-
 
   //useEffect
   useEffect(() => {
@@ -143,10 +138,10 @@ const Detail = () => {
     }
   }, [eating])
 
+  // cat data update
   useEffect(() => {
     dispatch(upDateData())
   }, [selectedCat])
-
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
@@ -154,6 +149,9 @@ const Detail = () => {
   return (
     <div className="detail">
       <div className="detail_profile">
+        <Timer work={eat} top={'10'}>
+          <span className="timer__text">놉!!안머겅!!</span>
+        </Timer>
         <div className="detail_img img">
           <img alt="cat profile"
             src={selectedCat.state === 'Death' ?
@@ -290,7 +288,7 @@ const Detail = () => {
             <FontAwesomeIcon icon={faBowlRice}/>
           </Button>
           <div className="timer__wrap">
-            <Timer>
+            <Timer work={work} top={'-15'}>
               <span className="timer__text">{timer}</span>
             </Timer>
             <Button
