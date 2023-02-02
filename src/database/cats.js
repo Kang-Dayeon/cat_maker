@@ -4,7 +4,7 @@ export const catStatus = {
   state3: 'Fatness',
   state4: 'Death'
 }
-export const cats = [
+export const catList = [
   {
     id: 0,
     name: '치즈',

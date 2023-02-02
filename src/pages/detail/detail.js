@@ -8,14 +8,11 @@ import Timer from '../../component/Timer'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
 import {
-  handleSelectedCat,
-  addHistory,
-  handleWeight,
-  handleAge,
   handleState,
-  addMessage,
-  upDateData
 } from '../../redux/cats'
+//recoil
+import {useRecoilState} from 'recoil'
+import {catListState, selectedCatState} from '../../recoil/atoms'
 // fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
@@ -31,11 +28,16 @@ const Detail = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const cats = useSelector(state => state.cat.cats)
-  const selectedCat = useSelector(state => state.cat.selectedCat)
+  //redux
+  // const catList = useSelector(state => state.cat.catList)
+  // const selectedCat = useSelector(state => state.cat.selectedCat)
   const user = useSelector(state => state.user.loginUser)
 
-  const catAge = selectedCat ? selectedCat.age : 0
+  // const catAge = selectedCat ? selectedCat.age : 0
+
+  //recoil
+  const [catList, setCatList] = useRecoilState(catListState)
+  const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
   // useStates
   const [eating, setEating] = useState(0)
@@ -55,34 +57,81 @@ const Detail = () => {
   const counter = (actionType) => {
     actionWatcher(actionType)
     disabledCheck(actionType)
+    console.log(selectedCat)
   }
 
   // dispatch reducer
-  const timeLine = (actionType) => {
-    dispatch(addHistory({
-      type: 'eat',
-      timeLine: new Date().toLocaleString() + ' '+user.name,
-      actionType,
-    }))
+  // const timeLine = (actionType) => {
+  //   dispatch(addHistory({
+  //     type: 'eat',
+  //     timeLine: new Date().toLocaleString() + ' '+user.name,
+  //     actionType,
+  //   }))
+  // }
+
+  // 버튼 클릭시 순차적으로 일어나야되는일
+  // 클릭 -> 타입을 체크 -> 타입에 따른 상태변화 -> 기존데이터랑 비교후 다른거 업데이트
+  // recoil history
+  const addHistory = (actionType) => {
+    setSelectedCat({
+      ...selectedCat,
+      age: 2,
+      history: [
+        ...selectedCat.history,
+        {
+          type: 'eat',
+          timeLine: new Date().toLocaleString() + ' '+user.name,
+          actionType,
+        }
+      ]
+    })
+    console.log(selectedCat.history.length)
   }
 
+  const handleWeight = (weight) => {
+    console.log(weight)
+    setSelectedCat({
+        ...selectedCat,
+        weight: Math.round((selectedCat.weight + weight) * 10) / 10
+    })
+  }
+
+  //먹이 타입 체크
+  const actionTypeCheck = (actionType) => {
+    if(actionType === 'water'){
+      // dispatch(handleWeight(+(selectedCat.weight + 0.1).toFixed(1) ))
+      handleWeight(0.1)
+    } else if (actionType === 'meat'){
+      // dispatch(handleWeight(selectedCat.weight + 3))
+      handleWeight(3)
+    } else if (actionType === 'feed'){
+      // dispatch(handleWeight(selectedCat.weight + 1))
+      handleWeight( 1)
+    } else if (actionType === 'work out'){
+      // dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
+      handleWeight(-2)
+    }
+  }
+
+
+
   //action타입에 따른 상태변경
+  //여기서 handleWeight 안되는 이유 == 아마 업데이트가 안되는듯..?
   const actionWatcher = (actionType) => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
     if((random < 7) && actionType !== 'work out') {
       setEating(eating + 1)
-      if(actionType === 'water'){
-        dispatch(handleWeight(+(selectedCat.weight + 0.1).toFixed(1) ))
-      } else if (actionType === 'meat'){
-        dispatch(handleWeight(selectedCat.weight + 3))
-      } else if (actionType === 'feed'){
-        dispatch(handleWeight(selectedCat.weight + 1))
-      }
-      timeLine(actionType)
+      actionTypeCheck(actionType)
+      // addHistory(actionType)
+      //if문 안에서는 안되는데 여기선 됨...왜..?
+      // 여기서 히스토리 업데이트하면서 몸무게도 바껴서 똑같기때무네 안되는것이여따ㅠㅠㅠ
+      // 먹이 먹고나서 순서 생각해서 해야될둡,,,
+      // handleWeight(4)
     }
     if(actionType === 'work out'){
-      dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
-      timeLine(actionType)
+      // dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
+      handleWeight(-2)
+      addHistory(actionType)
     }
   }
   // 비활성화
@@ -118,33 +167,42 @@ const Detail = () => {
   }
 
   //useEffect
+  // selected cat
   useEffect(() => {
-    if (params.key && cats.find(cat => cat.id === parseInt(params.key))) {
-      dispatch(handleSelectedCat(parseInt(params.key)))
+    if (params.key && catList.find(cat => cat.id === parseInt(params.key))) {
+      // dispatch(handleSelectedCat(parseInt(params.key)))
+      const finder = catList.find(cats => cats.id === parseInt(params.key))
+      setSelectedCat(finder)
     } else {
       navigate('/')
     }
   },[params])
 
   // 메세지 추가
-  useEffect(() => {
-    if(catAge % 3 === 0 || catAge !== 0){
-      dispatch(addMessage(Math.floor(catAge/3) + 1))
-    }
-  }, [catAge])
+  // useEffect(() => {
+  //   if(catAge % 3 === 0 || catAge !== 0){
+  //     dispatch(addMessage(Math.floor(catAge/3) + 1))
+  //   }
+  // }, [catAge])
 
   // 나이먹기
-  useEffect(() => {
-    if((eating % 3 === 0) && (eating !== 0)){
-      dispatch(handleAge(1))
-    }
-  }, [eating])
+  // useEffect(() => {
+  //   if((eating % 3 === 0) && (eating !== 0)){
+  //     dispatch(handleAge(1))
+  //   }
+  // }, [eating])
 
   // cat data update
   useEffect(() => {
-    dispatch(handleState())
-    dispatch(upDateData())
-    console.log(selectedCat)
+    // dispatch(handleState())
+    // dispatch(upDateData())
+    //recoil
+    if(selectedCat){
+      setCatList([
+        ...catList.filter(cat => cat.id !== selectedCat.id),
+        selectedCat
+      ])
+    }
   }, [selectedCat])
 
   if (!selectedCat) return
@@ -211,17 +269,13 @@ const Detail = () => {
                   <span>
                     {
                       selectedCat.history.length === 0 ? '' :
-                        selectedCat.history[selectedCat.history.length -
-                        1].actionType === 'water' ?
+                        selectedCat.history[selectedCat.history.length - 1].actionType === 'water' ?
                           <FontAwesomeIcon icon={faBottleWater}/> :
-                          selectedCat.history[selectedCat.history.length -
-                          1].actionType === 'meat' ?
+                          selectedCat.history[selectedCat.history.length - 1].actionType === 'meat' ?
                             <FontAwesomeIcon icon={faDrumstickBite}/> :
-                            selectedCat.history[selectedCat.history.length -
-                            1].actionType === 'feed' ?
+                            selectedCat.history[selectedCat.history.length - 1].actionType === 'feed' ?
                               <FontAwesomeIcon icon={faBowlRice}/> :
-                              selectedCat.history[selectedCat.history.length -
-                              1].actionType === 'work out' ?
+                              selectedCat.history[selectedCat.history.length - 1].actionType === 'work out' ?
                                 <FontAwesomeIcon icon={faDumbbell}/> :
                                 ''
                     }

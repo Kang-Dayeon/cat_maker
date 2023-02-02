@@ -5,23 +5,23 @@ import {PURGE} from 'redux-persist'
 export const catSlice = createSlice({
   name: 'cat',
   initialState: {
-    cats: data.cats,
+    catList: data.catList,
     selectedCat: null,
   },
   //todos: 리듀서 하나당 하나의 기능만
   reducers: {
-    upDateData: (state) => {
-      state.cats = [
-        ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
-        state.selectedCat,
-      ]
-    },
-    handleSelectedCat: (state, action) => {
-      state.selectedCat = state.cats.find(cat => cat.id === action.payload)
-    },
-    addHistory: (state, action) => {
-      state.selectedCat.history.push(action.payload)
-    },
+    // upDateData: (state) => {
+    //   state.catList = [
+    //     ...state.catList.filter(cat => cat.id !== state.selectedCat.id),
+    //     state.selectedCat,
+    //   ]
+    // },
+    // handleSelectedCat: (state, action) => {
+    //   state.selectedCat = state.catList.find(cat => cat.id === action.payload)
+    // },
+    // addHistory: (state, action) => {
+    //   state.selectedCat.history.push(action.payload)
+    // },
     // weight
     handleWeight: (state, action) => {
       state.selectedCat.weight = action.payload
