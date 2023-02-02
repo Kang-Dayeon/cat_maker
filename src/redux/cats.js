@@ -34,10 +34,8 @@ export const catSlice = createSlice({
     handleState: (state) => {
       state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight >= 0)) ? data.catStatus.state1 :
         (state.selectedCat.weight < 30) ? data.catStatus.state2 :
-           (state.selectedCat.age >= 15) || (state.selectedCat.age * 0.1 > state.selectedCat.weight)  ? data.catStatus.state4 :
+           (state.selectedCat.age >= 15) || ((state.selectedCat.age * 0.1) > state.selectedCat.weight) ? data.catStatus.state4 :
             data.catStatus.state3
-
-      console.log(state.selectedCat.age * 0.1)
     },
     // message
     addMessage: (state, action) => {

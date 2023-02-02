@@ -254,26 +254,6 @@ img{
 .timer.block{
     display: block;
 }
-.timer__text{
-    position: relative;
-    display: inline-block;
-    color: #fff;
-    font-size: 12px;
-}
-.timer__text::after{
-    position: absolute;
-    bottom: -16px;
-    left: 50%;
-    z-index: 10;
-    width: 0;
-    height: 0;
-    border-top: 8px solid #5b608c;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 8px solid transparent;
-    transform: translateX(-50%);
-    content: '';
-}
 @media (max-width: 1050px){
     .content{
         padding: 50px 0;

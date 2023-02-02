@@ -55,7 +55,6 @@ const Detail = () => {
   const counter = (actionType) => {
     actionWatcher(actionType)
     disabledCheck(actionType)
-    dispatch(handleState())
   }
 
   // dispatch reducer
@@ -70,7 +69,6 @@ const Detail = () => {
   //action타입에 따른 상태변경
   const actionWatcher = (actionType) => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
-    timeLine(actionType)
     if((random < 7) && actionType !== 'work out') {
       setEating(eating + 1)
       if(actionType === 'water'){
@@ -80,22 +78,26 @@ const Detail = () => {
       } else if (actionType === 'feed'){
         dispatch(handleWeight(selectedCat.weight + 1))
       }
+      timeLine(actionType)
     }
     if(actionType === 'work out'){
       dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
+      timeLine(actionType)
     }
   }
   // 비활성화
   const disabledCheck = (actionType) => {
-    if((random >= 7) || (actionType === 'work out')){
+    if((random >= 7) && (actionType !== 'work out')){
       setDisabled(true)
       setEat(true)
       disabledCheckOut(actionType)
     }
     if(actionType === 'work out'){
+      setDisabled(true)
       setWork(true)
       setTimer(10)
       setDelay(1000)
+      disabledCheckOut(actionType)
     }
   }
   //비활성화 풀기
@@ -140,7 +142,9 @@ const Detail = () => {
 
   // cat data update
   useEffect(() => {
+    dispatch(handleState())
     dispatch(upDateData())
+    console.log(selectedCat)
   }, [selectedCat])
 
   if (!selectedCat) return
@@ -149,9 +153,7 @@ const Detail = () => {
   return (
     <div className="detail">
       <div className="detail_profile">
-        <Timer work={eat} top={'10'}>
-          <span className="timer__text">놉!!안머겅!!</span>
-        </Timer>
+        <Timer work={eat} top={'-25'} type={'lg'}>놉!! 안머겅!!</Timer>
         <div className="detail_img img">
           <img alt="cat profile"
             src={selectedCat.state === 'Death' ?
@@ -165,7 +167,7 @@ const Detail = () => {
       </div>
       <div className="detail_info">
         <ul className="profile_state">
-          <li className="age">
+          <li className="gender">
             <p className="state_number">{selectedCat.gender}</p>
             <p className="state_name">Gender</p>
           </li>
@@ -288,9 +290,7 @@ const Detail = () => {
             <FontAwesomeIcon icon={faBowlRice}/>
           </Button>
           <div className="timer__wrap">
-            <Timer work={work} top={'-15'}>
-              <span className="timer__text">{timer}</span>
-            </Timer>
+            <Timer work={work} top={'-15'} type={'small'}>{timer}</Timer>
             <Button
               action={'work out'}
               disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
