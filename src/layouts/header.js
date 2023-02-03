@@ -13,11 +13,9 @@ const Header = () => {
 
   const logout = () => {
     setIsLogin(false)
+    window.localStorage.removeItem('recoil-persist')
     navigate('/')
   }
-  // const purge =  async () => {
-  //   await persistor.purge()
-  // }
   return (
     <div className="header">
       <Link to='/'><h1>Cat Maker 🐈</h1></Link>

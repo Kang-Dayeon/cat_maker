@@ -8,8 +8,9 @@ import Timer from '../../component/Timer'
 // redux
 import {useSelector} from 'react-redux'
 //recoil
+import {loginUserState} from '../../recoil/userAtoms'
 import {catListState, selectedCatState} from '../../recoil/catAtoms'
-import {useRecoilState} from 'recoil'
+import {useRecoilState, useRecoilValue} from 'recoil'
 //data
 import {catStatus} from '../../database/catList'
 // fontawesome
@@ -28,10 +29,9 @@ const Detail = () => {
   const params = useParams()
   const navigate = useNavigate()
 
-  //redux
-  const user = useSelector(state => state.user.loginUser)
-
   //recoil
+  const user = useRecoilValue(loginUserState)
+  const userName = user[0].name
   const [catList, setCatList] = useRecoilState(catListState)
   const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
@@ -70,7 +70,7 @@ const Detail = () => {
           ...selectedCat.history,
           {
             type: 'eat',
-            timeLine: new Date().toLocaleString() + ' ' + user.name,
+            timeLine: new Date().toLocaleString() + ' ' + userName,
             actionType,
           }
       ]}
