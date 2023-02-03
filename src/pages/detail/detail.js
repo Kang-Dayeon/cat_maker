@@ -6,10 +6,7 @@ import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import Timer from '../../component/Timer'
 // redux
-import {useDispatch, useSelector} from 'react-redux'
-import {
-  handleState,
-} from '../../redux/cats'
+import {useSelector} from 'react-redux'
 //recoil
 import {useRecoilState} from 'recoil'
 import {catListState, selectedCatState} from '../../recoil/atoms'
@@ -25,7 +22,6 @@ import useInterval from '../../hooks/useInterval'
 
 const Detail = () => {
   const params = useParams()
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   //redux
@@ -40,13 +36,15 @@ const Detail = () => {
   const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
   // useStates
-  const [eating, setEating] = useState(0)
+  const [countEat, setCountEat] = useState(0)
   const [random, setRandom] = useState(0)
   const [timer, setTimer] = useState(null)
   const [delay, setDelay] = useState(null)
   const [disabled, setDisabled] = useState(false)
   const [work, setWork] = useState(false)
   const [eat, setEat] = useState(false)
+
+  const randomCheck = random < 7 ? true : false
 
   //custom hooks
   useInterval(() => {
@@ -55,93 +53,71 @@ const Detail = () => {
 
   // function
   const counter = (actionType) => {
-    actionWatcher(actionType)
-    disabledCheck(actionType)
-    console.log(selectedCat)
+    setRandom(  Math.floor((Math.random() * (10 - 2)) + 2))
+    actionTypeCheck(actionType)
+    actionWorkOut(actionType)
   }
 
-  // dispatch reducer
-  // const timeLine = (actionType) => {
-  //   dispatch(addHistory({
-  //     type: 'eat',
-  //     timeLine: new Date().toLocaleString() + ' '+user.name,
-  //     actionType,
-  //   }))
-  // }
-
-  // 버튼 클릭시 순차적으로 일어나야되는일
-  // 클릭 -> 타입을 체크 -> 타입에 따른 상태변화 -> 기존데이터랑 비교후 다른거 업데이트
   // recoil history
   const addHistory = (actionType) => {
-    setSelectedCat({
-      ...selectedCat,
-      age: 2,
-      history: [
-        ...selectedCat.history,
-        {
-          type: 'eat',
-          timeLine: new Date().toLocaleString() + ' '+user.name,
-          actionType,
-        }
-      ]
+    setSelectedCat((selectedCat) => {
+      return {...selectedCat,
+          history: [
+          ...selectedCat.history,
+          {
+            type: 'eat',
+            timeLine: new Date().toLocaleString() + ' ' + user.name,
+            actionType,
+          }
+      ]}
     })
-    console.log(selectedCat.history.length)
   }
 
   const handleWeight = (weight) => {
-    console.log(weight)
-    setSelectedCat({
+    setSelectedCat((selectedCat) => {
+      return {
         ...selectedCat,
         weight: Math.round((selectedCat.weight + weight) * 10) / 10
+      }
     })
   }
 
-  //먹이 타입 체크
+  // 함수안에서 바로 리코일 스테이트 가져오면 바로 업데이트가 안됨
+  const addAge = () => {
+    if((countEat % 3 === 0) && (countEat !== 0)){
+      setSelectedCat((selectedCat) => {
+        return{
+          ...selectedCat,
+          age: selectedCat.age + 1
+        }
+      })
+    }
+  }
+
+  //타입 체크
   const actionTypeCheck = (actionType) => {
-    if(actionType === 'water'){
-      // dispatch(handleWeight(+(selectedCat.weight + 0.1).toFixed(1) ))
-      handleWeight(0.1)
-    } else if (actionType === 'meat'){
-      // dispatch(handleWeight(selectedCat.weight + 3))
-      handleWeight(3)
-    } else if (actionType === 'feed'){
-      // dispatch(handleWeight(selectedCat.weight + 1))
-      handleWeight( 1)
-    } else if (actionType === 'work out'){
-      // dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
-      handleWeight(-2)
-    }
-  }
-
-
-
-  //action타입에 따른 상태변경
-  //여기서 handleWeight 안되는 이유 == 아마 업데이트가 안되는듯..?
-  const actionWatcher = (actionType) => {
-    setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
-    if((random < 7) && actionType !== 'work out') {
-      setEating(eating + 1)
-      actionTypeCheck(actionType)
-      // addHistory(actionType)
-      //if문 안에서는 안되는데 여기선 됨...왜..?
-      // 여기서 히스토리 업데이트하면서 몸무게도 바껴서 똑같기때무네 안되는것이여따ㅠㅠㅠ
-      // 먹이 먹고나서 순서 생각해서 해야될둡,,,
-      // handleWeight(4)
-    }
-    if(actionType === 'work out'){
-      // dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
-      handleWeight(-2)
+    if(randomCheck && actionType !== 'work out'){
+      if(actionType === 'water'){
+        handleWeight(0.1)
+      } else if (actionType === 'meat'){
+        handleWeight(3)
+      } else if (actionType === 'feed'){
+        handleWeight( 1)
+      }
       addHistory(actionType)
-    }
-  }
-  // 비활성화
-  const disabledCheck = (actionType) => {
-    if((random >= 7) && (actionType !== 'work out')){
+      setCountEat(countEat + 1)
+    } else if(!randomCheck && actionType !== 'work out'){
       setDisabled(true)
       setEat(true)
       disabledCheckOut(actionType)
     }
+
+  }
+
+  const actionWorkOut = (actionType) => {
     if(actionType === 'work out'){
+      handleWeight(-2)
+      addHistory(actionType)
       setDisabled(true)
       setWork(true)
       setTimer(10)
@@ -149,6 +125,7 @@ const Detail = () => {
       disabledCheckOut(actionType)
     }
   }
+
   //비활성화 풀기
   const disabledCheckOut = (actionType) => {
     if(actionType === 'work out'){
@@ -178,6 +155,12 @@ const Detail = () => {
     }
   },[params])
 
+  useEffect(() => {
+    if(selectedCat){
+      addAge(countEat)
+    }
+  },[countEat])
+
   // 메세지 추가
   // useEffect(() => {
   //   if(catAge % 3 === 0 || catAge !== 0){
@@ -185,18 +168,8 @@ const Detail = () => {
   //   }
   // }, [catAge])
 
-  // 나이먹기
-  // useEffect(() => {
-  //   if((eating % 3 === 0) && (eating !== 0)){
-  //     dispatch(handleAge(1))
-  //   }
-  // }, [eating])
-
   // cat data update
   useEffect(() => {
-    // dispatch(handleState())
-    // dispatch(upDateData())
-    //recoil
     if(selectedCat){
       setCatList([
         ...catList.filter(cat => cat.id !== selectedCat.id),
