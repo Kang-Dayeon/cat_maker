@@ -1,11 +1,11 @@
-import { users } from '../database/users'
+import { userList } from '../database/userList'
 import { createSlice } from '@reduxjs/toolkit'
 import {PURGE} from 'redux-persist'
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    users,
+    users: userList,
     loginUser: null,
     isLogin: false
   },

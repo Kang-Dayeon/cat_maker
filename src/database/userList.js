@@ -1,4 +1,4 @@
-export const users = [
+export const userList = [
   {
     name: '다연',
     loginId: 'dykang',

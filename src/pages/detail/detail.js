@@ -8,8 +8,10 @@ import Timer from '../../component/Timer'
 // redux
 import {useSelector} from 'react-redux'
 //recoil
+import {catListState, selectedCatState} from '../../recoil/catAtoms'
 import {useRecoilState} from 'recoil'
-import {catListState, selectedCatState} from '../../recoil/atoms'
+//data
+import {catStatus} from '../../database/catList'
 // fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
@@ -18,18 +20,16 @@ import {
   faBowlRice,
   faDumbbell,
 } from '@fortawesome/free-solid-svg-icons'
+//hook
 import useInterval from '../../hooks/useInterval'
+
 
 const Detail = () => {
   const params = useParams()
   const navigate = useNavigate()
 
   //redux
-  // const catList = useSelector(state => state.cat.catList)
-  // const selectedCat = useSelector(state => state.cat.selectedCat)
   const user = useSelector(state => state.user.loginUser)
-
-  // const catAge = selectedCat ? selectedCat.age : 0
 
   //recoil
   const [catList, setCatList] = useRecoilState(catListState)
@@ -46,6 +46,9 @@ const Detail = () => {
 
   const randomCheck = random < 7 ? true : false
 
+  const catAge = selectedCat ? selectedCat.age : null
+  const weight = selectedCat ? selectedCat.weight : null
+
   //custom hooks
   useInterval(() => {
     setTimer(timer - 1)
@@ -56,6 +59,7 @@ const Detail = () => {
     setRandom(  Math.floor((Math.random() * (10 - 2)) + 2))
     actionTypeCheck(actionType)
     actionWorkOut(actionType)
+    stateCheck()
   }
 
   // recoil history
@@ -94,6 +98,15 @@ const Detail = () => {
     }
   }
 
+  const addMessage = (message) => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        message: [...message]
+      }
+    })
+  }
+
   //타입 체크
   const actionTypeCheck = (actionType) => {
     if(randomCheck && actionType !== 'work out'){
@@ -111,7 +124,6 @@ const Detail = () => {
       setEat(true)
       disabledCheckOut(actionType)
     }
-
   }
 
   const actionWorkOut = (actionType) => {
@@ -124,6 +136,23 @@ const Detail = () => {
       setDelay(1000)
       disabledCheckOut(actionType)
     }
+  }
+
+  // 상태변화
+  const handleState = (state) => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        state
+      }
+    })
+  }
+
+  const stateCheck = () => {
+    (selectedCat.weight < 2 && selectedCat.weight > 0) ? handleState(catStatus.state1) :
+      (selectedCat.weight > 30) ? handleState(catStatus.state3) :
+        ((selectedCat.age >= 15) || ((selectedCat.age * 0.1) > (selectedCat.weight))) ? handleState(catStatus.state4) :
+          handleState(catStatus.state2)
   }
 
   //비활성화 풀기
@@ -162,11 +191,18 @@ const Detail = () => {
   },[countEat])
 
   // 메세지 추가
-  // useEffect(() => {
-  //   if(catAge % 3 === 0 || catAge !== 0){
-  //     dispatch(addMessage(Math.floor(catAge/3) + 1))
-  //   }
-  // }, [catAge])
+  useEffect(() => {
+    if(((catAge % 3 === 0) || (catAge !== 0)) && (catAge !== null)){
+      // dispatch(addMessage(Math.floor(catAge/3) + 1))
+      addMessage(selectedCat.messages.slice(0, Math.floor(catAge/3) + 1))
+    }
+  }, [catAge])
+
+  useEffect(() => {
+    if(weight !== null){
+      stateCheck()
+    }
+  }, [weight])
 
   // cat data update
   useEffect(() => {

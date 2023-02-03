@@ -1,4 +1,4 @@
-import * as data from '../database/cats'
+import * as data from '../database/catList'
 import {atom} from 'recoil'
 
 // todos: redux로 만든거 recoil로 변경하기
@@ -12,3 +12,6 @@ export const selectedCatState = atom({
   key: 'selectedCattState',
   default: null
 })
+
+
+

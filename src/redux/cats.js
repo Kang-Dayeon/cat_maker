@@ -1,4 +1,4 @@
-import * as data from '../database/cats'
+import * as data from '../database/catList'
 import {createSlice} from '@reduxjs/toolkit'
 import {PURGE} from 'redux-persist'
 
