@@ -1,15 +1,20 @@
 import React from 'react'
 import '../App.css'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Button from '../component/Button'
-import {useSelector} from 'react-redux'
 import {persistor} from '../App'
-import {logout} from '../redux/login'
+import {isLoginState} from '../recoil/userAtoms'
+import {useRecoilState} from 'recoil'
 
 const Header = () => {
-  const isLogin = useSelector(state => state.user.isLogin)
-  const purge =  async () => {
-    await persistor.purge()
+  const navigate = useNavigate()
+
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState)
+
+  const logout = () => {
+    setIsLogin(false)
+    window.localStorage.removeItem('recoil-persist')
+    navigate('/')
   }
   return (
     <div className="header">
@@ -17,7 +22,6 @@ const Header = () => {
       {isLogin ? <Button onClick={async () =>
       {
         await logout()
-        await setTimeout(() => purge(), 200)
       }
       }>Logout</Button> : <></>}
     </div>

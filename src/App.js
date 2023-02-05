@@ -1,22 +1,23 @@
 import './App.css'
 import {BrowserRouter} from 'react-router-dom'
 import Routers from './router/routes'
-import { store } from './redux/store'
-import {Provider} from 'react-redux'
-import {persistStore} from 'redux-persist'
-import {PersistGate} from 'redux-persist/integration/react'
+//redux
+// import { store } from './redux/store'
+// import {Provider} from 'react-redux'
+// import {persistStore} from 'redux-persist'
+// import {PersistGate} from 'redux-persist/integration/react'
+//recoil
+import { RecoilRoot } from 'recoil'
 
-export const persistor = persistStore(store)
+// export const persistor = persistStore(store)
 
 function App() {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <Routers/>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Routers/>
+      </BrowserRouter>
+    </RecoilRoot>
   )
 }
 

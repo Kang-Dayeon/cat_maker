@@ -1,23 +1,23 @@
-import * as data from '../database/cats'
+import * as data from '../database/catList'
 import {createSlice} from '@reduxjs/toolkit'
 import {PURGE} from 'redux-persist'
 
 export const catSlice = createSlice({
   name: 'cat',
   initialState: {
-    cats: data.cats,
+    catList: data.catList,
     selectedCat: null,
   },
   //todos: 리듀서 하나당 하나의 기능만
   reducers: {
     upDateData: (state) => {
-      state.cats = [
-        ...state.cats.filter(cat => cat.id !== state.selectedCat.id),
+      state.catList = [
+        ...state.catList.filter(cat => cat.id !== state.selectedCat.id),
         state.selectedCat,
       ]
     },
     handleSelectedCat: (state, action) => {
-      state.selectedCat = state.cats.find(cat => cat.id === action.payload)
+      state.selectedCat = state.catList.find(cat => cat.id === action.payload)
     },
     addHistory: (state, action) => {
       state.selectedCat.history.push(action.payload)
@@ -32,12 +32,10 @@ export const catSlice = createSlice({
     },
     // state
     handleState: (state) => {
-      state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight > 0)) ? data.catStatus.state1 :
+      state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight >= 0)) ? data.catStatus.state1 :
         (state.selectedCat.weight < 30) ? data.catStatus.state2 :
-           (state.selectedCat.age >= 15) || (state.selectedCat.age * 0.1 > state.selectedCat.weight)  ? data.catStatus.state4 :
+           (state.selectedCat.age >= 15) || ((state.selectedCat.age * 0.1) > state.selectedCat.weight) ? data.catStatus.state4 :
             data.catStatus.state3
-
-      console.log(state.selectedCat.age * 0.1)
     },
     // message
     addMessage: (state, action) => {

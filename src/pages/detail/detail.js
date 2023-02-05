@@ -6,16 +6,13 @@ import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import Timer from '../../component/Timer'
 // redux
-import {useDispatch, useSelector} from 'react-redux'
-import {
-  handleSelectedCat,
-  addHistory,
-  handleWeight,
-  handleAge,
-  handleState,
-  addMessage,
-  upDateData
-} from '../../redux/cats'
+import {useSelector} from 'react-redux'
+//recoil
+import {loginUserState} from '../../recoil/userAtoms'
+import {catListState, selectedCatState} from '../../recoil/catAtoms'
+import {useRecoilState, useRecoilValue} from 'recoil'
+//data
+import {catStatus} from '../../database/catList'
 // fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
@@ -24,129 +21,198 @@ import {
   faBowlRice,
   faDumbbell,
 } from '@fortawesome/free-solid-svg-icons'
+//hook
 import useInterval from '../../hooks/useInterval'
+
 
 const Detail = () => {
   const params = useParams()
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const cats = useSelector(state => state.cat.cats)
-  const selectedCat = useSelector(state => state.cat.selectedCat)
-  const user = useSelector(state => state.user.loginUser)
+  //recoil
+  const user = useRecoilValue(loginUserState)
+  const userName = user[0].name
+  const [catList, setCatList] = useRecoilState(catListState)
+  const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
   // useStates
-  const [eating, setEating] = useState(0)
+  const [countEat, setCountEat] = useState(0)
   const [random, setRandom] = useState(0)
+  const [timer, setTimer] = useState(null)
+  const [delay, setDelay] = useState(null)
   const [disabled, setDisabled] = useState(false)
-  const [timer, setTimer] = useState(10)
-  const catAge = selectedCat ? selectedCat.age : 0
   const [work, setWork] = useState(false)
+  const [eat, setEat] = useState(false)
+
+  const randomCheck = random < 7 ? true : false
+
+  const catAge = selectedCat ? selectedCat.age : null
+  const weight = selectedCat ? selectedCat.weight : null
+
+  //custom hooks
+  useInterval(() => {
+    setTimer(timer - 1)
+  }, delay)
 
   // function
   const counter = (actionType) => {
-    actionWatcher(actionType)
-    disabledCheck(actionType)
-
+    setRandom(  Math.floor((Math.random() * (10 - 2)) + 2))
+    actionTypeCheck(actionType)
+    actionWorkOut(actionType)
+    stateCheck()
   }
 
-  // dispatch reducer
-  const timeLine = (actionType) => {
-    dispatch(addHistory({
-      type: 'eat',
-      timeLine: new Date().toLocaleString() + ' '+user.name,
-      actionType,
-    }))
+  // recoil history
+  const addHistory = (actionType) => {
+    setSelectedCat((selectedCat) => {
+      return {...selectedCat,
+          history: [
+          ...selectedCat.history,
+          {
+            type: 'eat',
+            timeLine: new Date().toLocaleString() + ' ' + userName,
+            actionType,
+          }
+      ]}
+    })
   }
 
-  //action타입에 따른 상태변경
-  const actionWatcher = (actionType) => {
-    setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
-    if((random < 7) && actionType !== 'work out') {
-      timeLine(actionType)
-      setEating(eating + 1)
-      if(actionType === 'water'){
-        dispatch(handleWeight(+(selectedCat.weight + 0.1).toFixed(1) ))
-      } else if (actionType === 'meat'){
-        dispatch(handleWeight(selectedCat.weight + 3))
-      } else if (actionType === 'feed'){
-        dispatch(handleWeight(selectedCat.weight + 1))
+  const handleWeight = (weight) => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        weight: Math.round((selectedCat.weight + weight) * 10) / 10
       }
-    }
-    if(actionType === 'work out'){
-      timeLine(actionType)
-      dispatch(handleWeight(+(selectedCat.weight - 2).toFixed(1)))
-    }
-    dispatch(handleState())
+    })
   }
-  // 비활성화
-  const disabledCheck = (actionType) => {
-    if(random >= 7 || actionType === 'work out'){
+
+  // 함수안에서 바로 리코일 스테이트 가져오면 바로 업데이트가 안됨
+  const addAge = () => {
+    if((countEat % 3 === 0) && (countEat !== 0)){
+      setSelectedCat((selectedCat) => {
+        return{
+          ...selectedCat,
+          age: selectedCat.age + 1
+        }
+      })
+    }
+  }
+
+  const addMessage = (message) => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        message: [...message]
+      }
+    })
+  }
+
+  //타입 체크
+  const actionTypeCheck = (actionType) => {
+    if(randomCheck && actionType !== 'work out'){
+      if(actionType === 'water'){
+        handleWeight(0.1)
+      } else if (actionType === 'meat'){
+        handleWeight(3)
+      } else if (actionType === 'feed'){
+        handleWeight( 1)
+      }
+      addHistory(actionType)
+      setCountEat(countEat + 1)
+    } else if(!randomCheck && actionType !== 'work out'){
       setDisabled(true)
-      setWork(true)
+      setEat(true)
       disabledCheckOut(actionType)
     }
   }
+
+  const actionWorkOut = (actionType) => {
+    if(actionType === 'work out'){
+      handleWeight(-2)
+      addHistory(actionType)
+      setDisabled(true)
+      setWork(true)
+      setTimer(10)
+      setDelay(1000)
+      disabledCheckOut(actionType)
+    }
+  }
+
+  // 상태변화
+  const handleState = (state) => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        state
+      }
+    })
+  }
+
+  const stateCheck = () => {
+    (selectedCat.weight < 2 && selectedCat.weight > 0) ? handleState(catStatus.state1) :
+      (selectedCat.weight > 30) ? handleState(catStatus.state3) :
+        ((selectedCat.age >= 15) || ((selectedCat.age * 0.1) > (selectedCat.weight))) ? handleState(catStatus.state4) :
+          handleState(catStatus.state2)
+  }
+
   //비활성화 풀기
   const disabledCheckOut = (actionType) => {
     if(actionType === 'work out'){
       setTimeout(() => {
         setDisabled(false)
         setWork(false)
+        setDelay(null)
       }, 10000)
+      setTimer(10)
     } else {
       setTimeout(() => {
         setDisabled(false)
+        setEat(false)
       }, random * 1000)
     }
   }
-  // const interval = () => {
-  //   setInterval(() => {
-  //     if(work){
-  //       setTimer(timer => timer - 1)
-  //       console.log(timer)
-  //     } else {
-  //       console.log('stop')
-  //       clearInterval(interval)
-  //     }
-  //   }, 1000)
-  // }
-
-  useEffect(() => {
-    // interval()
-  }, [work])
-
-  console.log(work)
-
-
 
   //useEffect
+  // selected cat
   useEffect(() => {
-    if (params.key && cats.find(cat => cat.id === parseInt(params.key))) {
-      dispatch(handleSelectedCat(parseInt(params.key)))
+    if (params.key && catList.find(cat => cat.id === parseInt(params.key))) {
+      // dispatch(handleSelectedCat(parseInt(params.key)))
+      const finder = catList.find(cats => cats.id === parseInt(params.key))
+      setSelectedCat(finder)
     } else {
       navigate('/')
     }
   },[params])
 
+  useEffect(() => {
+    if(selectedCat){
+      addAge(countEat)
+    }
+  },[countEat])
+
   // 메세지 추가
   useEffect(() => {
-    if(catAge % 3 === 0 || catAge !== 0){
-      dispatch(addMessage(Math.floor(catAge/3) + 1))
+    if(((catAge % 3 === 0) || (catAge !== 0)) && (catAge !== null)){
+      // dispatch(addMessage(Math.floor(catAge/3) + 1))
+      addMessage(selectedCat.messages.slice(0, Math.floor(catAge/3) + 1))
     }
   }, [catAge])
 
-  // 나이먹기
   useEffect(() => {
-    if((eating % 3 === 0) && (eating !== 0)){
-      dispatch(handleAge(1))
+    if(weight !== null){
+      stateCheck()
     }
-  }, [eating])
+  }, [weight])
 
+  // cat data update
   useEffect(() => {
-    dispatch(upDateData())
+    if(selectedCat){
+      setCatList([
+        ...catList.filter(cat => cat.id !== selectedCat.id),
+        selectedCat
+      ])
+    }
   }, [selectedCat])
-
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
@@ -154,6 +220,7 @@ const Detail = () => {
   return (
     <div className="detail">
       <div className="detail_profile">
+        <Timer work={eat} top={'-25'} type={'lg'}>놉!! 안머겅!!</Timer>
         <div className="detail_img img">
           <img alt="cat profile"
             src={selectedCat.state === 'Death' ?
@@ -167,7 +234,7 @@ const Detail = () => {
       </div>
       <div className="detail_info">
         <ul className="profile_state">
-          <li className="age">
+          <li className="gender">
             <p className="state_number">{selectedCat.gender}</p>
             <p className="state_name">Gender</p>
           </li>
@@ -211,17 +278,13 @@ const Detail = () => {
                   <span>
                     {
                       selectedCat.history.length === 0 ? '' :
-                        selectedCat.history[selectedCat.history.length -
-                        1].actionType === 'water' ?
+                        selectedCat.history[selectedCat.history.length - 1].actionType === 'water' ?
                           <FontAwesomeIcon icon={faBottleWater}/> :
-                          selectedCat.history[selectedCat.history.length -
-                          1].actionType === 'meat' ?
+                          selectedCat.history[selectedCat.history.length - 1].actionType === 'meat' ?
                             <FontAwesomeIcon icon={faDrumstickBite}/> :
-                            selectedCat.history[selectedCat.history.length -
-                            1].actionType === 'feed' ?
+                            selectedCat.history[selectedCat.history.length - 1].actionType === 'feed' ?
                               <FontAwesomeIcon icon={faBowlRice}/> :
-                              selectedCat.history[selectedCat.history.length -
-                              1].actionType === 'work out' ?
+                              selectedCat.history[selectedCat.history.length - 1].actionType === 'work out' ?
                                 <FontAwesomeIcon icon={faDumbbell}/> :
                                 ''
                     }
@@ -290,9 +353,7 @@ const Detail = () => {
             <FontAwesomeIcon icon={faBowlRice}/>
           </Button>
           <div className="timer__wrap">
-            <Timer>
-              <span className="timer__text">{timer}</span>
-            </Timer>
+            <Timer work={work} top={'-15'} type={'small'}>{timer}</Timer>
             <Button
               action={'work out'}
               disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}

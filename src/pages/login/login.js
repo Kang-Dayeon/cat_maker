@@ -2,24 +2,33 @@ import React from 'react'
 import Button from '../../component/Button'
 import '../../App.css'
 import useInput from '../../hooks/useInput'
-//redux
-import {useDispatch} from 'react-redux'
-import {login} from '../../redux/login'
+//recoil
+import {useRecoilValue, useSetRecoilState} from 'recoil'
+import {userListState, loginUserState, isLoginState} from '../../recoil/userAtoms'
 // fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
-  const dispatch = useDispatch()
+  const userList = useRecoilValue(userListState)
+  const setLoginUser = useSetRecoilState(loginUserState)
+  const setIsLogin = useSetRecoilState(isLoginState)
+
+  // hook
   const [text, setText] = useInput({
     loginId : "",
     password: ""
   })
+
   const loginAction = (loginId, password) => {
-    dispatch(login({
-      loginId,
-      password
-    }))
+    if(!userList.some((item) => item.loginId === loginId)){
+      alert("아이디가 일치하지 않습니다")
+    } else if(!userList.some((item) => item.password === password)){
+      alert('비밀번호가 일치하지 않습니다.')
+    } else {
+      setLoginUser(userList.filter(user => user.loginId === loginId && user.password === password))
+      setIsLogin(true)
+    }
   }
 
   return (
