@@ -5,8 +5,8 @@ import '../../App.css'
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import Timer from '../../component/Timer'
-// redux
-import {useSelector} from 'react-redux'
+//hook
+import useInterval from '../../hooks/useInterval'
 //recoil
 import {loginUserState} from '../../recoil/userAtoms'
 import {catListState, selectedCatState} from '../../recoil/catAtoms'
@@ -21,21 +21,20 @@ import {
   faBowlRice,
   faDumbbell,
 } from '@fortawesome/free-solid-svg-icons'
-//hook
-import useInterval from '../../hooks/useInterval'
 
 
 const Detail = () => {
+  //----------------------- react --------------------------//
   const params = useParams()
   const navigate = useNavigate()
 
-  //recoil
+  //----------------------- atoms ---------------------------//
   const user = useRecoilValue(loginUserState)
   const userName = user[0].name
   const [catList, setCatList] = useRecoilState(catListState)
   const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
-  // useStates
+  //------------------------ useStates --------------------------------------//
   const [countEat, setCountEat] = useState(0)
   const [random, setRandom] = useState(0)
   const [timer, setTimer] = useState(null)
@@ -43,26 +42,55 @@ const Detail = () => {
   const [disabled, setDisabled] = useState(false)
   const [work, setWork] = useState(false)
   const [eat, setEat] = useState(false)
+  const [currentTime, setCurrentTime] = useState()
 
+  //------------------------------ const -----------------------------------//
   const randomCheck = random < 7 ? true : false
-
   const catAge = selectedCat ? selectedCat.age : null
   const weight = selectedCat ? selectedCat.weight : null
 
-  //custom hooks
+  // ----------------------------- custom hooks ---------------------------//
+  // 메세지 비활성화 타이머
   useInterval(() => {
     setTimer(timer - 1)
   }, delay)
 
-  // function
+  // 마지막 밥먹은시간, 현재시간 업데이트
+  useInterval(() => {
+    if(selectedCat.history.length > 0){
+      setCurrentTime(selectedCat.history[selectedCat.history.length - 1].timeStamp - Date.now())
+    }
+  }, 100)
+
+  // 마지막 밥먹고 1분 이상됐을경우 체중 -1
+  useInterval(() => {
+    if((selectedCat) && (-currentTime > -60000) && (selectedCat.state !== catStatus.state4)){
+      handleWeight(-1)
+    }
+  }, 60000)
+
+  // 키우기시작(버튼클릭)후 2분 경과시 나이 +1
+  useInterval(() => {
+    if(selectedCat.history.length > 0 && selectedCat.state !== catStatus.state4){
+      setSelectedCat((selectedCat) => {
+        return{
+          ...selectedCat,
+          age: selectedCat.age + 1
+        }
+      })
+    }
+  }, 120000)
+
+  // ----------------------------- function ---------------------------//
+  //버튼클릭시 함수
   const counter = (actionType) => {
-    setRandom(  Math.floor((Math.random() * (10 - 2)) + 2))
+    setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
     actionTypeCheck(actionType)
     actionWorkOut(actionType)
     stateCheck()
   }
 
-  // recoil history
+  // history 추가
   const addHistory = (actionType) => {
     setSelectedCat((selectedCat) => {
       return {...selectedCat,
@@ -72,11 +100,23 @@ const Detail = () => {
             type: 'eat',
             timeLine: new Date().toLocaleString() + ' ' + userName,
             actionType,
+            timeStamp: Date.now()
           }
       ]}
     })
   }
 
+  // 상태변화
+  const handleState = (state) => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        state
+      }
+    })
+  }
+
+  // 체중추가
   const handleWeight = (weight) => {
     setSelectedCat((selectedCat) => {
       return {
@@ -86,7 +126,7 @@ const Detail = () => {
     })
   }
 
-  // 함수안에서 바로 리코일 스테이트 가져오면 바로 업데이트가 안됨
+  // 나이추가
   const addAge = () => {
     if((countEat % 3 === 0) && (countEat !== 0)){
       setSelectedCat((selectedCat) => {
@@ -98,6 +138,7 @@ const Detail = () => {
     }
   }
 
+  // 메세지추가
   const addMessage = (message) => {
     setSelectedCat((selectedCat) => {
       return {
@@ -107,7 +148,7 @@ const Detail = () => {
     })
   }
 
-  //타입 체크
+  // 밥 먹을지 안먹을지 & 먹었을경우 타입 체크 후 몸무게 더하기 + 버튼 비활성화
   const actionTypeCheck = (actionType) => {
     if(randomCheck && actionType !== 'work out'){
       if(actionType === 'water'){
@@ -126,6 +167,7 @@ const Detail = () => {
     }
   }
 
+  // 운동하기 버튼 클릭시 체중 -2 & 10초동안 비활성화
   const actionWorkOut = (actionType) => {
     if(actionType === 'work out'){
       handleWeight(-2)
@@ -138,16 +180,7 @@ const Detail = () => {
     }
   }
 
-  // 상태변화
-  const handleState = (state) => {
-    setSelectedCat((selectedCat) => {
-      return {
-        ...selectedCat,
-        state
-      }
-    })
-  }
-
+  // 몸무게, 나이등 체크해서 상태변경하기
   const stateCheck = () => {
     (selectedCat.weight < 2 && selectedCat.weight > 0) ? handleState(catStatus.state1) :
       (selectedCat.weight > 30) ? handleState(catStatus.state3) :
@@ -172,8 +205,8 @@ const Detail = () => {
     }
   }
 
-  //useEffect
-  // selected cat
+  //--------------------------- useEffect ----------------------------------//
+  // selected cat 업로드
   useEffect(() => {
     if (params.key && catList.find(cat => cat.id === parseInt(params.key))) {
       // dispatch(handleSelectedCat(parseInt(params.key)))
@@ -184,6 +217,7 @@ const Detail = () => {
     }
   },[params])
 
+  // 먹은 횟수에따라 나이 변경
   useEffect(() => {
     if(selectedCat){
       addAge(countEat)
@@ -198,13 +232,14 @@ const Detail = () => {
     }
   }, [catAge])
 
+  // 몸무게 변경될때마다 상태체크
   useEffect(() => {
     if(weight !== null){
       stateCheck()
     }
   }, [weight])
 
-  // cat data update
+  // selected cat 데이터 변경될때마다 전체 데이터 업로드
   useEffect(() => {
     if(selectedCat){
       setCatList([
