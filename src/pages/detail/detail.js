@@ -5,6 +5,7 @@ import '../../App.css'
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import Timer from '../../component/Timer'
+import ContentBox from '../../component/ContentBox'
 //hook
 import useInterval from '../../hooks/useInterval'
 //recoil
@@ -93,8 +94,9 @@ const Detail = () => {
   // history 추가
   const addHistory = (actionType) => {
     setSelectedCat((selectedCat) => {
-      return {...selectedCat,
-          history: [
+      return {
+        ...selectedCat,
+        history: [
           ...selectedCat.history,
           {
             type: 'eat',
@@ -102,7 +104,8 @@ const Detail = () => {
             actionType,
             timeStamp: Date.now()
           }
-      ]}
+      ]
+      }
     })
   }
 
@@ -253,7 +256,7 @@ const Detail = () => {
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
 
   return (
-    <div className="detail">
+    <ContentBox size={'big'}>
       <div className="detail_profile">
         <Timer work={eat} top={'-25'} type={'lg'}>놉!! 안머겅!!</Timer>
         <div className="detail_img img">
@@ -400,7 +403,7 @@ const Detail = () => {
         </div>
 
       </div>
-    </div>
+    </ContentBox>
   )
 }
 

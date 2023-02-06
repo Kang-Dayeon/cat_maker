@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <div className="header">
       <Link to='/'><h1>Cat Maker 🐈</h1></Link>
-      {isLogin ? <Button onClick={async () =>
+      {isLogin ? <Button margin={'none'} onClick={async () =>
       {
         await logout()
       }

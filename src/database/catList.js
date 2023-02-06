@@ -1,3 +1,7 @@
+export const gender = {
+  male: 'Male',
+  female: 'Female'
+}
 export const catStatus = {
   state1: 'Skinny',
   state2: 'Normal',
@@ -8,7 +12,7 @@ export const catList = [
   {
     id: 0,
     name: '치즈',
-    gender: 'Female',
+    gender: gender.female,
     image: require('../assets/image/cat01.jpg'),
     dieImage: require('../assets/image/cat01_die.jpg'),
     age: 1,
@@ -29,7 +33,7 @@ export const catList = [
   {
     id: 1,
     name: '콩떡',
-    gender: 'Male',
+    gender: gender.male,
     image: require('../assets/image/cat02.jpg'),
     dieImage: require('../assets/image/cat02_die.jpg'),
     age: 1,
@@ -50,7 +54,7 @@ export const catList = [
   {
     id: 2,
     name: '쿠로',
-    gender: 'Female',
+    gender: gender.female,
     image: require('../assets/image/cat03.jpg'),
     dieImage: require('../assets/image/cat03_die.jpg'),
     age: 1,

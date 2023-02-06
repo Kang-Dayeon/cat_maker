@@ -3,15 +3,15 @@ import styled from 'styled-components'
 
 const RoundButton = styled.button`
     position: relative;
-    margin: 20px 10px 0;
+    margin: ${(props) => (props.margin === 'none') ? '0' : '20px 10px 0'};
     padding: 10px 0;
     width: ${(props) => props.action ? '100px' : '200px'};
     font-size: 16px;
     border: none;
     border-radius: 20px;
     color: #fff;
-    background-color: ${(props) => props.color || '#b2acf3'};
-    cursor: ${(props) => props.cursor || 'pointer'};
+    background-color: #b2acf3;
+    cursor: pointer;
     
     :hover::after {
       display: ${(props) => props.action ? 'block' : 'none'};
@@ -36,9 +36,9 @@ const RoundButton = styled.button`
     }
   `
 
-const Button = ({children, color, cursor, onClick, action, disabled}) => {
+const Button = ({children, onClick, action, disabled, margin}) => {
   return (
-    <RoundButton disabled={disabled} action={action} color={color} cursor={cursor} onClick={onClick}>{children}</RoundButton>
+    <RoundButton margin={margin} disabled={disabled} action={action} onClick={onClick}>{children}</RoundButton>
   )
 }
 

@@ -4,6 +4,7 @@ import '../../App.css'
 //component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
+import ContentBox from '../../component/ContentBox'
 
 const Profile = (props) => {
   // ----------------------------- react ---------------------------//
@@ -18,7 +19,7 @@ const Profile = (props) => {
   }
 
   return (
-    <div className="profile">
+    <ContentBox size={'small'}>
       <div className={catList.state === 'Fatness' ? 'profile_img img fat' :
         catList.state === 'Death' ? 'profile_img img death' : 'profile_img img'}>
         <img alt="cat profile"
@@ -50,7 +51,7 @@ const Profile = (props) => {
       >
         View Profile
       </Button>
-    </div>
+    </ContentBox>
   )
 }
 

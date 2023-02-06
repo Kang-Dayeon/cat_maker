@@ -2,6 +2,8 @@ import React from 'react'
 import Button from '../../component/Button'
 import '../../App.css'
 import useInput from '../../hooks/useInput'
+//component
+import ContentBox from '../../component/ContentBox'
 //recoil
 import {useRecoilValue, useSetRecoilState} from 'recoil'
 import {userListState, loginUserState, isLoginState} from '../../recoil/userAtoms'
@@ -34,7 +36,7 @@ const Login = () => {
   }
 
   return (
-    <div className="login">
+    <ContentBox size={'medium'} color={'purple'}>
       <div className="login__wrap">
         <h2><FontAwesomeIcon icon={faPaw} /></h2>
         <form className="login-form">
@@ -47,7 +49,7 @@ const Login = () => {
           >LOGIN</Button>
         </form>
       </div>
-    </div>
+    </ContentBox>
   )
 }
 

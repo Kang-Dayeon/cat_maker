@@ -16,10 +16,21 @@ a{
 a:hover{
     color: #fff;
 }
+input{
+    display: block;
+}
 img{
     width: 100%;
 }
-
+input[type="text"],
+input[type="password"]{
+    margin-top: 15px;
+    padding: 5px 10px;
+    max-width: 300px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+}
 .img{
     border-radius: 50%;
     overflow: hidden;
@@ -59,20 +70,6 @@ img{
     margin-top: 20px;
 }
 /*profile*/
-.profile{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 15px;
-    padding: 30px 0;
-    min-width: 300px;
-    border-radius: 10px;
-    background: #fff;
-    -webkit-box-shadow: 3px 3px 5px 0 rgba(0,0,0,0.1);
-    box-shadow: 3px 3px 5px 0 rgba(0,0,0,0.1);
-}
 .profile_img{
     width: 160px;
     height: 150px;
@@ -111,16 +108,7 @@ img{
 }
 
 /*derail*/
-.detail{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 40px 30px 50px;
-    width: 70%;
-    background-color: #fff;
-    border-radius: 20px;
-}
+
 .detail_profile{
     position: relative;
 }
@@ -213,14 +201,6 @@ img{
 }
 
 /*login*/
-.login {
-    display: flex;
-    justify-content: center;
-    padding: 50px 30px;
-    width: 500px;
-    background-color: #e4e9fa;
-    border-radius: 20px;
-}
 .login h2{
     font-size: 30px;
     color: #5b608c;
@@ -228,14 +208,6 @@ img{
 .login-form{
     display: flex;
     flex-direction: column;
-}
-.login-form input {
-    margin-top: 15px;
-    padding: 5px 10px;
-    max-width: 300px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: none;
 }
 /*timer*/
 .timer{
@@ -254,6 +226,52 @@ img{
 .timer.block{
     display: block;
 }
+/*new cat*/
+/*.new-cat{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
+.new-cat__box{
+    width: 200px;
+    height: 200px;
+    background-color: #e4e9fa;
+}
+.new-cat__image{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.new-cat__text{
+    display: flex;
+    align-items: center;
+}
+.new-cat__text input[type="text"]{
+    border: 1px solid rgba(0,0,0,0.2);
+    text-align: center;
+}
+.new-cat__input{
+    margin-top: 10px;
+}
+.file-box{
+    position: relative;
+}
+.file-box label{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #5b608c;
+    color: #fff;
+    border-radius: 20px;
+    font-size: 12px;
+}
+.file-box input[type="file"]{
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
 @media (max-width: 1050px){
     .content{
         padding: 50px 0;
@@ -270,10 +288,6 @@ img{
 @media (max-width: 500px){
     .content{
         padding: 30px 0;
-    }
-    .detail{
-        padding: 30px 15px 30px;
-        width: 80%;
     }
     .detail_img{
         width: 200px;

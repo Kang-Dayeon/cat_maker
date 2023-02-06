@@ -3,8 +3,9 @@ import '../App.css'
 import Profile from './profile/profile'
 //component
 import Login from './login/login'
+import NewCat from './new/newCat'
 //recoil
-import { useRecoilValue} from 'recoil'
+import {useRecoilValue} from 'recoil'
 import {isLoginState} from '../recoil/userAtoms'
 import {catListState} from '../recoil/catAtoms'
 
@@ -12,6 +13,7 @@ const Index = () => {
   // ----------------------------- atoms ---------------------------//
   const isLogin = useRecoilValue(isLoginState)
   const catList = useRecoilValue(catListState)
+  console.log(catList)
   //logout시 사용할 리셋
   // const resetCatList = useResetRecoilState(catList)
 
@@ -22,6 +24,7 @@ const Index = () => {
         return <Profile catList={item} key={i}/>
       }): <Login/>
       }
+      {isLogin ? <NewCat/> : <></>}
     </>
   )
 }
