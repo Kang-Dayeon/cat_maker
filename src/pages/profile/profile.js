@@ -6,12 +6,17 @@ import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 
 const Profile = (props) => {
+  // ----------------------------- react ---------------------------//
   const navigate = useNavigate()
+
+  // ----------------------------- props ---------------------------//
   const catList = props.catList
 
+  // ----------------------------- function ---------------------------//
   const handleDetailNavigate = (id) => {
     navigate('/detail/' + id)
   }
+
   return (
     <div className="profile">
       <div className={catList.state === 'Fatness' ? 'profile_img img fat' :

@@ -10,16 +10,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
+  //----------------------- atoms ---------------------------//
   const userList = useRecoilValue(userListState)
   const setLoginUser = useSetRecoilState(loginUserState)
   const setIsLogin = useSetRecoilState(isLoginState)
 
-  // hook
+  // ----------------------------- custom hooks ---------------------------//
   const [text, setText] = useInput({
     loginId : "",
     password: ""
   })
 
+  // ----------------------------- function ---------------------------//
   const loginAction = (loginId, password) => {
     if(!userList.some((item) => item.loginId === loginId)){
       alert("아이디가 일치하지 않습니다")
