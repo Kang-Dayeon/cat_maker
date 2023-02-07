@@ -43,7 +43,6 @@ const NewCat = () => {
       name: text.name,
       gender: text.gender,
       image: imageFile.thumbnail,
-      dieImage: imageFile.thumbnail,
       age: 1,
       weight: 1,
       state: catStatus.state2,
@@ -57,6 +56,7 @@ const NewCat = () => {
         '그동안 고마웠...😇',
       ],
       message: [],
+      timeDifference: null
     }
     setCatList((catList) => {
       return [
@@ -65,6 +65,7 @@ const NewCat = () => {
       ]
     })
     navigate('/')
+    console.log(catList)
   }
 
   return (

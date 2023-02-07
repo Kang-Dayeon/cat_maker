@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import '../../App.css'
 //component
@@ -11,11 +11,94 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons'
 // recoil
 import {useRecoilState} from 'recoil'
 import {catListState} from '../../recoil/catAtoms'
+import useInterval from '../../hooks/useInterval'
+import {catStatus} from '../../database/catList'
 
 const Profile = () => {
   const navigate = useNavigate()
 
   const [catList, setCatList] = useRecoilState(catListState)
+
+  const weight = catList ? catList.weight : null
+
+  // 마지막 밥먹은시간, 현재시간 업데이트
+  useInterval(() => {
+    setCatList(
+      catList.map((item, i) => {
+        if(item.history.length > 0){
+          return{
+          ...item,
+            timeDifference: item.history[item.history.length - 1].timeStamp - Date.now(),
+          }
+        } else {
+          return {
+            ...item
+          }
+        }
+      })
+    )
+  }, 1000)
+
+  // 마지막 밥먹고 1분 이상됐을경우 체중 -1
+  useInterval(() => {
+    setCatList(
+      catList.map((item) => {
+        if((-item.timeDifference > -60000) && (item.state !== catStatus.state4)){
+          return{
+            ...item,
+            weight: item.weight - 1
+          }
+        } else {
+          return {
+            ...item
+          }
+        }
+      })
+    )
+  }, 60000)
+
+  // 키우기시작(버튼클릭)후 2분 경과시 나이 +1
+  useInterval(() => {
+    setCatList(
+      catList.map((item) => {
+        if ((item.history.length > 0) && (item.state !== catStatus.state4)){
+          return {
+            ...item,
+            age: item.age + 1,
+          }
+        } else {
+          return {
+            ...item
+          }
+        }
+      })
+    )
+  }, 120000)
+
+  // 몸무게, 나이등 체크해서 상태변경하기
+  const stateCheck = () => {
+    catList.map((item) => {
+      ((item.weight < 2) && (item.weight > 0)) ?
+        handleState(catStatus.state1) :
+        (item.weight > 30) ?
+          handleState(catStatus.state3) :
+          ((item.age >= 15) ||
+            ((item.age * 0.1) > (item.weight))) ?
+            handleState(catStatus.state4) :
+            handleState(catStatus.state2)
+    })
+  }
+  // 상태변화
+  const handleState = (state) => {
+    setCatList(
+      catList.map((item) => {
+        return {
+          ...item,
+          state,
+        }
+      })
+    )
+  }
 
   // 상세페이지 이동
   const handleDetailNavigate = (id) => {
@@ -30,6 +113,15 @@ const Profile = () => {
       navigate('/')
     }
   }
+
+  useEffect(() => {
+    if(catList.weight || catList.age){
+      stateCheck()
+      handleState()
+    }
+  }, [weight])
+
+  if (!catList) return
 
   return (
     <>

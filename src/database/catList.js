@@ -14,7 +14,6 @@ export const catList = [
     name: '치즈',
     gender: gender.female,
     image: require('../assets/image/cat01.jpg'),
-    dieImage: require('../assets/image/cat01_die.jpg'),
     age: 1,
     weight: 1,
     state: catStatus.state2,
@@ -27,14 +26,14 @@ export const catList = [
       '이제 움직이기 힘들다옹',
       '그동안 고마웠...😇'
     ],
-    message: []
+    message: [],
+    timeDifference: null
   },
   {
     id: 1,
     name: '콩떡',
     gender: gender.male,
     image: require('../assets/image/cat02.jpg'),
-    dieImage: require('../assets/image/cat02_die.jpg'),
     age: 1,
     weight: 1,
     state: catStatus.state2,
@@ -47,14 +46,14 @@ export const catList = [
       '귀찮아...',
       '...😇'
     ],
-    message: []
+    message: [],
+    timeDifference: null
   },
   {
     id: 2,
     name: '쿠로',
     gender: gender.female,
     image: require('../assets/image/cat03.jpg'),
-    dieImage: require('../assets/image/cat03_die.jpg'),
     age: 1,
     weight: 1,
     state: catStatus.state2,
@@ -67,6 +66,7 @@ export const catList = [
       '이제 그만....',
       '죽여줘...🙀‍'
     ],
-    message: []
+    message: [],
+    timeDifference: null
   }
 ]

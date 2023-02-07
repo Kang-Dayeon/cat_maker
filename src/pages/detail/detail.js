@@ -39,7 +39,6 @@ const Detail = () => {
   const [disabled, setDisabled] = useState(false)
   const [work, setWork] = useState(false)
   const [eat, setEat] = useState(false)
-  const [currentTime, setCurrentTime] = useState()
 
   const randomCheck = (random < 7) ? true : false
   const catAge = (selectedCat) ? selectedCat.age : null
@@ -53,14 +52,18 @@ const Detail = () => {
   // 마지막 밥먹은시간, 현재시간 업데이트
   useInterval(() => {
     if (selectedCat.history.length > 0) {
-      setCurrentTime(
-        selectedCat.history[selectedCat.history.length - 1].timeStamp - Date.now())
+      setSelectedCat((selectedCat) => {
+        return {
+          ...selectedCat,
+          timeDifference: selectedCat.history[selectedCat.history.length - 1].timeStamp - Date.now()
+        }
+      })
     }
-  }, 100)
+  }, 1000)
 
   // 마지막 밥먹고 1분 이상됐을경우 체중 -1
   useInterval(() => {
-    if ((selectedCat) && (-currentTime > -60000) && (selectedCat.state !== catStatus.state4)) {
+    if ((selectedCat) && (-selectedCat.timeDifference > -60000) && (selectedCat.state !== catStatus.state4)) {
       handleWeight(-1)
     }
   }, 60000)
@@ -86,7 +89,7 @@ const Detail = () => {
   }
 
   // history 추가
-  const addHistory = (actionType) => {
+  const addHistory = (actionType, currentTime) => {
     setSelectedCat((selectedCat) => {
       return {
         ...selectedCat,
@@ -241,9 +244,11 @@ const Detail = () => {
   // selected cat 데이터 변경될때마다 전체 데이터 업로드
   useEffect(() => {
     if (selectedCat) {
+      const filterCat = catList.filter(cat => cat.id !== selectedCat.id)
+      filterCat.push(selectedCat)
+      filterCat.sort((a,b) => a.id - b.id)
       setCatList([
-        ...catList.filter(cat => cat.id !== selectedCat.id),
-        selectedCat,
+        ...filterCat
       ])
     }
   }, [selectedCat])
