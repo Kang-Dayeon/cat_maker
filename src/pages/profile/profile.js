@@ -50,7 +50,8 @@ const Profile = () => {
           }
         } else {
           return {
-            ...item
+            ...item,
+            weight: item.weight
           }
         }
       })
@@ -68,7 +69,8 @@ const Profile = () => {
           }
         } else {
           return {
-            ...item
+            ...item,
+            age: item.age
           }
         }
       })
