@@ -1,29 +1,34 @@
 import React from 'react'
 import '../App.css'
 import {Link, useNavigate} from 'react-router-dom'
+// component
 import Button from '../component/Button'
-import {persistor} from '../App'
+// recoil
+import {useRecoilState, useResetRecoilState} from 'recoil'
 import {isLoginState} from '../recoil/userAtoms'
-import {useRecoilState} from 'recoil'
+import {catListState} from '../recoil/catAtoms'
 
 const Header = () => {
   const navigate = useNavigate()
 
   const [isLogin, setIsLogin] = useRecoilState(isLoginState)
+  const resetCatList = useResetRecoilState(catListState)
 
   const logout = () => {
     setIsLogin(false)
-    window.localStorage.removeItem('recoil-persist')
+    resetCatList()
     navigate('/')
   }
   return (
     <div className="header">
-      <Link to='/'><h1>Cat Maker 🐈</h1></Link>
-      {isLogin ? <Button margin={'none'} onClick={async () =>
+      <Link to="/"><h1>Cat Maker 🐈</h1></Link>
       {
-        await logout()
+        isLogin ?
+          <Button margin={'none'} onClick={async () => {
+            await logout()
+          }}>Logout</Button> :
+          <></>
       }
-      }>Logout</Button> : <></>}
     </div>
   )
 }

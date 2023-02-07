@@ -12,7 +12,7 @@ const Routers = () => {
   return (
     <>
       <div className="wrap">
-        <Header />
+        <Header/>
         <div className="content">
           <div className="content_wrap">
             <Routes>

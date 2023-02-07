@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import '../../App.css'
 //component
@@ -23,19 +23,15 @@ import {
   faDumbbell,
 } from '@fortawesome/free-solid-svg-icons'
 
-
 const Detail = () => {
-  //----------------------- react --------------------------//
   const params = useParams()
   const navigate = useNavigate()
 
-  //----------------------- atoms ---------------------------//
   const user = useRecoilValue(loginUserState)
   const userName = user[0].name
   const [catList, setCatList] = useRecoilState(catListState)
   const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
-  //------------------------ useStates --------------------------------------//
   const [countEat, setCountEat] = useState(0)
   const [random, setRandom] = useState(0)
   const [timer, setTimer] = useState(null)
@@ -45,12 +41,10 @@ const Detail = () => {
   const [eat, setEat] = useState(false)
   const [currentTime, setCurrentTime] = useState()
 
-  //------------------------------ const -----------------------------------//
-  const randomCheck = random < 7 ? true : false
-  const catAge = selectedCat ? selectedCat.age : null
-  const weight = selectedCat ? selectedCat.weight : null
+  const randomCheck = (random < 7) ? true : false
+  const catAge = (selectedCat) ? selectedCat.age : null
+  const weight = (selectedCat) ? selectedCat.weight : null
 
-  // ----------------------------- custom hooks ---------------------------//
   // 메세지 비활성화 타이머
   useInterval(() => {
     setTimer(timer - 1)
@@ -58,31 +52,31 @@ const Detail = () => {
 
   // 마지막 밥먹은시간, 현재시간 업데이트
   useInterval(() => {
-    if(selectedCat.history.length > 0){
-      setCurrentTime(selectedCat.history[selectedCat.history.length - 1].timeStamp - Date.now())
+    if (selectedCat.history.length > 0) {
+      setCurrentTime(
+        selectedCat.history[selectedCat.history.length - 1].timeStamp - Date.now())
     }
   }, 100)
 
   // 마지막 밥먹고 1분 이상됐을경우 체중 -1
   useInterval(() => {
-    if((selectedCat) && (-currentTime > -60000) && (selectedCat.state !== catStatus.state4)){
+    if ((selectedCat) && (-currentTime > -60000) && (selectedCat.state !== catStatus.state4)) {
       handleWeight(-1)
     }
   }, 60000)
 
   // 키우기시작(버튼클릭)후 2분 경과시 나이 +1
   useInterval(() => {
-    if(selectedCat.history.length > 0 && selectedCat.state !== catStatus.state4){
+    if ((selectedCat.history.length > 0) && (selectedCat.state !== catStatus.state4)) {
       setSelectedCat((selectedCat) => {
-        return{
+        return {
           ...selectedCat,
-          age: selectedCat.age + 1
+          age: selectedCat.age + 1,
         }
       })
     }
   }, 120000)
 
-  // ----------------------------- function ---------------------------//
   //버튼클릭시 함수
   const counter = (actionType) => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
@@ -102,9 +96,9 @@ const Detail = () => {
             type: 'eat',
             timeLine: new Date().toLocaleString() + ' ' + userName,
             actionType,
-            timeStamp: Date.now()
-          }
-      ]
+            timeStamp: Date.now(),
+          },
+        ],
       }
     })
   }
@@ -114,7 +108,7 @@ const Detail = () => {
     setSelectedCat((selectedCat) => {
       return {
         ...selectedCat,
-        state
+        state,
       }
     })
   }
@@ -124,18 +118,18 @@ const Detail = () => {
     setSelectedCat((selectedCat) => {
       return {
         ...selectedCat,
-        weight: Math.round((selectedCat.weight + weight) * 10) / 10
+        weight: Math.round((selectedCat.weight + weight) * 10) / 10,
       }
     })
   }
 
   // 나이추가
   const addAge = () => {
-    if((countEat % 3 === 0) && (countEat !== 0)){
+    if ((countEat % 3 === 0) && (countEat !== 0)) {
       setSelectedCat((selectedCat) => {
-        return{
+        return {
           ...selectedCat,
-          age: selectedCat.age + 1
+          age: selectedCat.age + 1,
         }
       })
     }
@@ -146,24 +140,24 @@ const Detail = () => {
     setSelectedCat((selectedCat) => {
       return {
         ...selectedCat,
-        message: [...message]
+        message: [...message],
       }
     })
   }
 
   // 밥 먹을지 안먹을지 & 먹었을경우 타입 체크 후 몸무게 더하기 + 버튼 비활성화
   const actionTypeCheck = (actionType) => {
-    if(randomCheck && actionType !== 'work out'){
-      if(actionType === 'water'){
+    if ((randomCheck) && (actionType !== 'work out')) {
+      if (actionType === 'water') {
         handleWeight(0.1)
-      } else if (actionType === 'meat'){
+      } else if (actionType === 'meat') {
         handleWeight(3)
-      } else if (actionType === 'feed'){
-        handleWeight( 1)
+      } else if (actionType === 'feed') {
+        handleWeight(1)
       }
       addHistory(actionType)
       setCountEat(countEat + 1)
-    } else if(!randomCheck && actionType !== 'work out'){
+    } else if ((!randomCheck) && (actionType !== 'work out')) {
       setDisabled(true)
       setEat(true)
       disabledCheckOut(actionType)
@@ -172,7 +166,7 @@ const Detail = () => {
 
   // 운동하기 버튼 클릭시 체중 -2 & 10초동안 비활성화
   const actionWorkOut = (actionType) => {
-    if(actionType === 'work out'){
+    if (actionType === 'work out') {
       handleWeight(-2)
       addHistory(actionType)
       setDisabled(true)
@@ -185,15 +179,19 @@ const Detail = () => {
 
   // 몸무게, 나이등 체크해서 상태변경하기
   const stateCheck = () => {
-    (selectedCat.weight < 2 && selectedCat.weight > 0) ? handleState(catStatus.state1) :
-      (selectedCat.weight > 30) ? handleState(catStatus.state3) :
-        ((selectedCat.age >= 15) || ((selectedCat.age * 0.1) > (selectedCat.weight))) ? handleState(catStatus.state4) :
+    ((selectedCat.weight < 2) && (selectedCat.weight > 0)) ?
+      handleState(catStatus.state1) :
+      (selectedCat.weight > 30) ?
+        handleState(catStatus.state3) :
+        ((selectedCat.age >= 15) ||
+          ((selectedCat.age * 0.1) > (selectedCat.weight))) ?
+          handleState(catStatus.state4) :
           handleState(catStatus.state2)
   }
 
   //비활성화 풀기
   const disabledCheckOut = (actionType) => {
-    if(actionType === 'work out'){
+    if (actionType === 'work out') {
       setTimeout(() => {
         setDisabled(false)
         setWork(false)
@@ -208,46 +206,44 @@ const Detail = () => {
     }
   }
 
-  //--------------------------- useEffect ----------------------------------//
   // selected cat 업로드
   useEffect(() => {
-    if (params.key && catList.find(cat => cat.id === parseInt(params.key))) {
-      // dispatch(handleSelectedCat(parseInt(params.key)))
+    if ((params.key) &&
+      (catList.find(cat => cat.id === parseInt(params.key)))) {
       const finder = catList.find(cats => cats.id === parseInt(params.key))
       setSelectedCat(finder)
     } else {
       navigate('/')
     }
-  },[params])
+  }, [params])
 
   // 먹은 횟수에따라 나이 변경
   useEffect(() => {
-    if(selectedCat){
+    if (selectedCat) {
       addAge(countEat)
     }
-  },[countEat])
+  }, [countEat])
 
   // 메세지 추가
   useEffect(() => {
-    if(((catAge % 3 === 0) || (catAge !== 0)) && (catAge !== null)){
-      // dispatch(addMessage(Math.floor(catAge/3) + 1))
-      addMessage(selectedCat.messages.slice(0, Math.floor(catAge/3) + 1))
+    if (((catAge % 3 === 0) || (catAge !== 0)) && (catAge !== null)) {
+      addMessage(selectedCat.messages.slice(0, Math.floor(catAge / 3) + 1))
     }
   }, [catAge])
 
   // 몸무게 변경될때마다 상태체크
   useEffect(() => {
-    if(weight !== null){
+    if (weight !== null) {
       stateCheck()
     }
   }, [weight])
 
   // selected cat 데이터 변경될때마다 전체 데이터 업로드
   useEffect(() => {
-    if(selectedCat){
+    if (selectedCat) {
       setCatList([
         ...catList.filter(cat => cat.id !== selectedCat.id),
-        selectedCat
+        selectedCat,
       ])
     }
   }, [selectedCat])
@@ -259,11 +255,12 @@ const Detail = () => {
     <ContentBox size={'big'}>
       <div className="detail_profile">
         <Timer work={eat} top={'-25'} type={'lg'}>놉!! 안머겅!!</Timer>
-        <div className="detail_img img">
-          <img alt="cat profile"
-            src={selectedCat.state === 'Death' ?
-            selectedCat.dieImage :
-            selectedCat.image}/>
+        <div className={(selectedCat.state === 'Fatness') ? 'detail_img img fat' :
+          (selectedCat.state === 'Death') ?
+            'detail_img img death' :
+            'detail_img img'}>
+          <div className={(selectedCat.state === 'Death') ? 'death_layer' : ''}></div>
+          <img alt="cat profile" src={selectedCat.image}/>
         </div>
         <div className="detail_text">
           <h3 className="detail_name">{selectedCat.name}</h3>
@@ -293,19 +290,20 @@ const Detail = () => {
                 <p>
                   <span>
                     {
-                      selectedCat.history.length === 0 ? '' :
-                        selectedCat.history[0].actionType === 'water' ?
+                      (selectedCat.history.length === 0) ? '' :
+                        (selectedCat.history[0].actionType === 'water') ?
                           <FontAwesomeIcon icon={faBottleWater}/> :
-                          selectedCat.history[0].actionType === 'meat' ?
+                          (selectedCat.history[0].actionType === 'meat') ?
                             <FontAwesomeIcon icon={faDrumstickBite}/> :
-                            selectedCat.history[0].actionType === 'feed' ?
+                            (selectedCat.history[0].actionType === 'feed') ?
                               <FontAwesomeIcon icon={faBowlRice}/> :
-                              selectedCat.history[0].actionType === 'work out' ?
+                              (selectedCat.history[0].actionType ===
+                                'work out') ?
                                 <FontAwesomeIcon icon={faDumbbell}/> :
                                 ''
                     }
                   </span>
-                  {selectedCat.history.length > 0 ?
+                  {(selectedCat.history.length > 0) ?
                     selectedCat.history[0].timeLine :
                     ''}
                 </p>
@@ -315,20 +313,21 @@ const Detail = () => {
                 <p>
                   <span>
                     {
-                      selectedCat.history.length === 0 ? '' :
-                        selectedCat.history[selectedCat.history.length - 1].actionType === 'water' ?
+                      (selectedCat.history.length === 0) ? '' :
+                        (selectedCat.history[selectedCat.history.length - 1].actionType === 'water') ?
                           <FontAwesomeIcon icon={faBottleWater}/> :
-                          selectedCat.history[selectedCat.history.length - 1].actionType === 'meat' ?
+                          (selectedCat.history[selectedCat.history.length - 1].actionType === 'meat') ?
                             <FontAwesomeIcon icon={faDrumstickBite}/> :
-                            selectedCat.history[selectedCat.history.length - 1].actionType === 'feed' ?
+                            (selectedCat.history[selectedCat.history.length - 1].actionType === 'feed') ?
                               <FontAwesomeIcon icon={faBowlRice}/> :
-                              selectedCat.history[selectedCat.history.length - 1].actionType === 'work out' ?
+                              (selectedCat.history[selectedCat.history.length - 1].actionType === 'work out') ?
                                 <FontAwesomeIcon icon={faDumbbell}/> :
                                 ''
                     }
                   </span>
-                  {selectedCat.history.length > 0 ?
-                    selectedCat.history[selectedCat.history.length - 1].timeLine :
+                  {(selectedCat.history.length > 0) ?
+                    selectedCat.history[selectedCat.history.length -
+                    1].timeLine :
                     ''}
                 </p>
               </li>
@@ -339,11 +338,11 @@ const Detail = () => {
                     <li>
                       <span>
                         {
-                          item.actionType === 'water' ?
+                          (item.actionType === 'water') ?
                             <FontAwesomeIcon icon={faBottleWater}/> :
-                            item.actionType === 'meat' ?
+                            (item.actionType === 'meat') ?
                               <FontAwesomeIcon icon={faDrumstickBite}/> :
-                              item.actionType === 'feed' ?
+                              (item.actionType === 'feed') ?
                                 <FontAwesomeIcon icon={faBowlRice}/> :
                                 <FontAwesomeIcon icon={faDumbbell}/>
                         }
@@ -371,21 +370,27 @@ const Detail = () => {
         <div className="button__wrap">
           <Button
             action={'Water'}
-            disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+            disabled={((selectedCat.state === 'Death') || (disabled)) ?
+              'disabled' :
+              ''}
             onClick={() => counter('water')}
           >
             <FontAwesomeIcon icon={faBottleWater}/>
           </Button>
           <Button
             action={'Meat'}
-            disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+            disabled={((selectedCat.state === 'Death') || (disabled)) ?
+              'disabled' :
+              ''}
             onClick={() => counter('meat')}
           >
             <FontAwesomeIcon icon={faDrumstickBite}/>
           </Button>
           <Button
             action={'Feed'}
-            disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+            disabled={((selectedCat.state === 'Death') || (disabled)) ?
+              'disabled' :
+              ''}
             onClick={() => counter('feed')}
           >
             <FontAwesomeIcon icon={faBowlRice}/>
@@ -394,14 +399,15 @@ const Detail = () => {
             <Timer work={work} top={'-15'} type={'small'}>{timer}</Timer>
             <Button
               action={'work out'}
-              disabled={selectedCat.state === 'Death' || disabled ? 'disabled' : ''}
+              disabled={((selectedCat.state === 'Death') || (disabled)) ?
+                'disabled' :
+                ''}
               onClick={() => counter('work out')}
             >
               <FontAwesomeIcon icon={faDumbbell}/>
             </Button>
+          </div>
         </div>
-        </div>
-
       </div>
     </ContentBox>
   )

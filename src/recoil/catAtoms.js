@@ -9,13 +9,13 @@ const {persistAtom} = recoilPersist()
 export const catListState = atom({
   key: 'catListState',
   default: data.catList,
-  effects_UNSTABLE: [persistAtom]
+  effects_UNSTABLE: [persistAtom],
 })
 
 export const selectedCatState = atom({
   key: 'selectedCattState',
   default: null,
-  effects_UNSTABLE: [persistAtom]
+  effects_UNSTABLE: [persistAtom],
 })
 
 

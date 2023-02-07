@@ -38,7 +38,13 @@ const RoundButton = styled.button`
 
 const Button = ({children, onClick, action, disabled, margin}) => {
   return (
-    <RoundButton margin={margin} disabled={disabled} action={action} onClick={onClick}>{children}</RoundButton>
+    <RoundButton margin={margin}
+                 disabled={disabled}
+                 action={action}
+                 onClick={onClick}
+    >
+      {children}
+    </RoundButton>
   )
 }
 

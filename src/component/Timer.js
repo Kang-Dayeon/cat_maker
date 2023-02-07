@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 
 const TimerStyled = styled.div`
-  display: ${(props) => props.work ? 'block' : 'none'};
+  display: ${(props) => (props.work)? 'block' : 'none'};
   position: absolute;
   top: ${(props) => props.top}px;
   left: 50%;
-  padding: ${(props) => props.type === 'lg' ? '20px 25px' : '3px 10px'};
-  border-radius: ${(props) => props.type === 'lg' ? '50%' : '30%'};
+  z-index: 20;
+  padding: ${(props) => (props.type === 'lg')? '20px 25px' : '3px 10px'};
+  border-radius: ${(props) => (props.type === 'lg')? '50%' : '30%'};
   background-color: #5b608c;
   transform: translateX(-50%);
 `
@@ -19,7 +20,7 @@ const TimerText = styled.span`
   font-weight: bold;
   ::after{
     position: absolute;
-    bottom: ${(props) => props.type === 'lg' ? '-35px' : '-16px'};
+    bottom: ${(props) => (props.type === 'lg')? '-35px' : '-16px'};
     left: 50%;
     z-index: 10;
     width: 0;

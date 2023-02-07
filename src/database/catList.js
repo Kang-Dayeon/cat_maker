@@ -19,7 +19,6 @@ export const catList = [
     weight: 1,
     state: catStatus.state2,
     history: [],
-    messageLength: 1,
     messages: [
       '잘 키워보시게',
       '밥줘!!!',
@@ -40,7 +39,6 @@ export const catList = [
     weight: 1,
     state: catStatus.state2,
     history: [],
-    messageLength: 1,
     messages: [
       '반갑냥',
       '밥이 부족해.....',
@@ -61,7 +59,6 @@ export const catList = [
     weight: 1,
     state: catStatus.state2,
     history: [],
-    messageLength: 1,
     messages: [
       '냥?',
       '냥얀😻',

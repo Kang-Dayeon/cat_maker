@@ -10,6 +10,7 @@ const BoxStyled = styled.div`
     margin: ${(props) => props.size === 'small' ? '15px' : '0'};
     padding: ${(props) => props.size === 'small' ? '30px 0' : '50px 30px'};
     min-width: 300px;
+    min-height: 382px;
     width: ${(props) => (props.size === 'big')? '70%' : (props.size === 'medium')? '500px' : '300px'};
     border-radius: ${(props) => props.size === 'small' ? '10px' : '20px'};
     background: ${(props) => props.color === 'purple' ? '#e4e9fa' : '#fff'};
