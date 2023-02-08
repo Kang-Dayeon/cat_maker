@@ -11,7 +11,9 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons'
 // recoil
 import {useRecoilState} from 'recoil'
 import {catListState} from '../../recoil/catAtoms'
+// hook
 import useInterval from '../../hooks/useInterval'
+// data
 import {catStatus} from '../../database/catList'
 
 const Profile = () => {
@@ -19,49 +21,45 @@ const Profile = () => {
 
   const [catList, setCatList] = useRecoilState(catListState)
 
-  const weight = catList ? catList.weight : null
+  useInterval(() => {
+    handleTimeDifference()
+  }, 1000)
+
+  useInterval(() => {
+    stateCheck()
+  }, 1000)
+
+  useInterval(() => {
+    handleWeight()
+  }, 60000)
+
+  useInterval(() => {
+    handleAge()
+  }, 120000)
 
   // 마지막 밥먹은시간, 현재시간 업데이트
-  useInterval(() => {
+  const handleTimeDifference = () => {
     setCatList(
       catList.map((item, i) => {
         if(item.history.length > 0){
           return{
-          ...item,
-            timeDifference: item.history[item.history.length - 1].timeStamp - Date.now(),
-          }
-        } else {
-          return {
-            ...item
-          }
-        }
-      })
-    )
-  }, 1000)
-
-  // 마지막 밥먹고 1분 이상됐을경우 체중 -1
-  useInterval(() => {
-    setCatList(
-      catList.map((item) => {
-        if((-item.timeDifference > -60000) && (item.state !== catStatus.state4)){
-          return{
             ...item,
-            weight: item.weight - 1
+            timeDifference: Date.now() - item.history[item.history.length - 1].timeStamp,
           }
         } else {
           return {
             ...item,
-            weight: item.weight
+            timeDifference: null
           }
         }
       })
     )
-  }, 60000)
+  }
 
-  // 키우기시작(버튼클릭)후 2분 경과시 나이 +1
-  useInterval(() => {
+  // 나이 변경
+  const handleAge = () => {
     setCatList(
-      catList.map((item) => {
+      catList.map((item, i) => {
         if ((item.history.length > 0) && (item.state !== catStatus.state4)){
           return {
             ...item,
@@ -75,31 +73,54 @@ const Profile = () => {
         }
       })
     )
-  }, 120000)
-
-  // 몸무게, 나이등 체크해서 상태변경하기
-  const stateCheck = () => {
-    catList.map((item) => {
-      ((item.weight < 2) && (item.weight > 0)) ?
-        handleState(catStatus.state1) :
-        (item.weight > 30) ?
-          handleState(catStatus.state3) :
-          ((item.age >= 15) ||
-            ((item.age * 0.1) > (item.weight))) ?
-            handleState(catStatus.state4) :
-            handleState(catStatus.state2)
-    })
   }
-  // 상태변화
-  const handleState = (state) => {
+
+  // 몸무게 변경
+  const handleWeight = () => {
     setCatList(
-      catList.map((item) => {
-        return {
-          ...item,
-          state,
+      catList.map((item, i) => {
+        if((item.timeDifference > 60000) && (item.state !== catStatus.state4)){
+          return{
+            ...item,
+            weight: Math.round((item.weight - 1) * 10) / 10,
+          }
+        } else {
+          return {
+            ...item,
+            weight: item.weight
+          }
         }
       })
     )
+  }
+
+  // 몸무게, 나이등 체크해서 상태변경하기
+  const stateCheck = () => {
+      setCatList(
+        catList.map((item) => {
+          if((item.weight < 2) && (item.weight > 0)){
+            return {
+              ...item,
+              state : catStatus.state1
+            }
+          } else if(item.weight > 30){
+            return {
+              ...item,
+              state : catStatus.state3
+            }
+          } else if((item.age >= 15) || ((item.age * 0.1) > (item.weight))){
+            return {
+              ...item,
+              state : catStatus.state4
+            }
+          } else {
+            return {
+              ...item,
+              state : catStatus.state2
+            }
+          }
+        })
+      )
   }
 
   // 상세페이지 이동
@@ -109,19 +130,12 @@ const Profile = () => {
 
   // 삭제하기
   const deleteCat = (id) => {
-    if (catList) {
-      console.log(id)
+    const deleteConfirm = window.confirm('정말 삭제 하시겠습니까?')
+    if (catList && deleteConfirm) {
       setCatList(catList => catList.filter(item => item.id !== id))
       navigate('/')
     }
   }
-
-  useEffect(() => {
-    if(catList.weight || catList.age){
-      stateCheck()
-      handleState()
-    }
-  }, [weight])
 
   if (!catList) return
 

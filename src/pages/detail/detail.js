@@ -51,34 +51,31 @@ const Detail = () => {
 
   // 마지막 밥먹은시간, 현재시간 업데이트
   useInterval(() => {
-    if (selectedCat.history.length > 0) {
-      setSelectedCat((selectedCat) => {
-        return {
-          ...selectedCat,
-          timeDifference: selectedCat.history[selectedCat.history.length - 1].timeStamp - Date.now()
-        }
-      })
-    }
+    handleTimeDifference()
   }, 1000)
 
   // 마지막 밥먹고 1분 이상됐을경우 체중 -1
   useInterval(() => {
-    if ((selectedCat) && (-selectedCat.timeDifference > -60000) && (selectedCat.state !== catStatus.state4)) {
+    if ((selectedCat) && (selectedCat.timeDifference > 60000) && (selectedCat.state !== catStatus.state4)) {
       handleWeight(-1)
     }
   }, 60000)
 
   // 키우기시작(버튼클릭)후 2분 경과시 나이 +1
   useInterval(() => {
-    if ((selectedCat.history.length > 0) && (selectedCat.state !== catStatus.state4)) {
+    addAge()
+  }, 120000)
+
+  const handleTimeDifference = () => {
+    if (selectedCat.history.length > 0) {
       setSelectedCat((selectedCat) => {
         return {
           ...selectedCat,
-          age: selectedCat.age + 1,
+          timeDifference: Date.now() - selectedCat.history[selectedCat.history.length - 1].timeStamp
         }
       })
     }
-  }, 120000)
+  }
 
   //버튼클릭시 함수
   const counter = (actionType) => {
@@ -128,7 +125,7 @@ const Detail = () => {
 
   // 나이추가
   const addAge = () => {
-    if ((countEat % 3 === 0) && (countEat !== 0)) {
+    if ((countEat % 3 === 0) && (countEat !== 0) && (selectedCat.history.length > 0) && (selectedCat.state !== catStatus.state4)) {
       setSelectedCat((selectedCat) => {
         return {
           ...selectedCat,

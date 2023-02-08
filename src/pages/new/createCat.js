@@ -65,7 +65,6 @@ const NewCat = () => {
       ]
     })
     navigate('/')
-    console.log(catList)
   }
 
   return (
