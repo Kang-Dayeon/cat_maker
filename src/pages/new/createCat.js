@@ -87,7 +87,7 @@ const NewCat = () => {
 
           <div className="new-cat__input new-cat__text">
             <input name="name" type="text" value={text.name} onChange={setText}
-                   placeholder="이름을 지어주세요!"/>
+                   placeholder="이름을 지어주세요!" maxLength="5"/>
             <select className="select" name="gender" onChange={setText}
                     value={text.gender}>
               <option value={gender.male} selected="selected">Male</option>

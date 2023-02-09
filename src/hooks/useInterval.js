@@ -13,8 +13,8 @@ function useInterval(callback, delay){
       saveCallback.current()
     }
     if(delay !== null){
-      let id = setInterval(interval, delay)
-      return () => clearInterval(id)
+      let handleInterval = setInterval(interval, delay)
+      return () => clearInterval(handleInterval)
     }
   }, [delay])
 

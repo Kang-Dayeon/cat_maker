@@ -7,6 +7,9 @@ import Button from '../component/Button'
 import {useRecoilState, useResetRecoilState} from 'recoil'
 import {isLoginState} from '../recoil/userAtoms'
 import {catListState} from '../recoil/catAtoms'
+// fontawesome
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faArrowRightFromBracket} from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -24,9 +27,11 @@ const Header = () => {
       <Link to="/"><h1>Cat Maker 🐈</h1></Link>
       {
         isLogin ?
-          <Button margin={'none'} onClick={async () => {
-            await logout()
-          }}>Logout</Button> :
+          <div className="header__button">
+            <button className="logout_btn" onClick={async () => {await logout()}}>
+              <FontAwesomeIcon icon={faArrowRightFromBracket} />
+            </button>
+          </div> :
           <></>
       }
     </div>

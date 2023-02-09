@@ -7,23 +7,25 @@ const RoundButton = styled.button`
     padding: 10px 0;
     width: ${(props) => props.action ? '100px' : '200px'};
     font-size: 16px;
-    border: none;
     border-radius: 20px;
     color: #fff;
     background-color: #b2acf3;
-    cursor: pointer;
-    
+    transition: all 0.3s;
+    :hover{
+      border-radius: 0;
+    }
     :hover::after {
       display: ${(props) => props.action ? 'block' : 'none'};
       position: absolute;
-      bottom: -30px;
-      left: 5px;
+      bottom: -32px;
+      left: 50%;
       z-index: 1;
       padding: 5px;
       width: 80px;
       background-color: #fff;
       color: #000;
       border-radius: 5px;
+      transform: translateX(-50%);
       -webkit-box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.2);
       box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.2);
       font-size: 12px;
