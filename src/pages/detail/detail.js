@@ -25,7 +25,6 @@ const Detail = () => {
 
   // ** recoil
   const user = useRecoilValue(loginUserState)
-  const userName = user[0].name
   const [catList, setCatList] = useRecoilState(catListState)
   const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
@@ -39,6 +38,7 @@ const Detail = () => {
   const [eat, setEat] = useState(false)
 
   //TODO : custom hook으로 변경
+  
 
   // 메세지 비활성화 타이머
   useInterval(() => {
@@ -78,6 +78,9 @@ const Detail = () => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
     actionTypeCheck(actionType)
     actionWorkOut(actionType)
+    if (((selectedCat.age % 3 === 0) || (selectedCat.age !== 0)) && (selectedCat.age !== null)) {
+      addMessage(selectedCat.messages.slice(0, Math.floor(selectedCat.age / 3) + 1))
+    }
   }
 
   // history 추가
@@ -89,11 +92,26 @@ const Detail = () => {
           ...selectedCat.history,
           {
             type: 'eat',
-            timeLine: new Date().toLocaleString() + ' ' + userName,
+            timeLine: new Date().toLocaleString() + ' ' + user.name,
             actionType,
             timeStamp: Date.now(),
           },
         ],
+      }
+    })
+  }
+
+  // 상태변화
+  const handleState = () => {
+    setSelectedCat((selectedCat) => {
+      return {
+        ...selectedCat,
+        state:((selectedCat.weight < 2) && (selectedCat.weight > 0)) ?
+            catStatus.skinny :
+            (selectedCat.weight > 30) ?
+              catStatus.fatness :
+              ((selectedCat.age >= 15) || ((selectedCat.age * 0.1) > (selectedCat.weight))) ?
+                catStatus.death : catStatus.normal
       }
     })
   }
@@ -129,21 +147,6 @@ const Detail = () => {
       }
     })
   }
-
-  const handleState = () => {
-    setSelectedCat((selectedCat) => {
-    return {
-      ...selectedCat,
-      state: selectedCat.weight < 2 && selectedCat.weight > 0
-          ? catStatus.skinny
-          : selectedCat.weight > 30
-          ? catStatus.fatness
-          : selectedCat.age >= 15 || selectedCat.age * 0.1 > selectedCat.weight
-          ? catStatus.death
-          : catStatus.normal
-    };
-  })
-};
 
   // 밥 먹을지 안먹을지 & 먹었을경우 타입 체크 후 몸무게 더하기 + 버튼 비활성화
   const actionTypeCheck = (actionType) => {
@@ -210,10 +213,9 @@ const Detail = () => {
     if (selectedCat) {
       addAge(countEat)
       handleState()
+      
     }
-    if (((selectedCat.age % 3 === 0) || (selectedCat.age !== 0)) && (selectedCat.age !== null)) {
-      addMessage(selectedCat.messages.slice(0, Math.floor(selectedCat.age / 3) + 1))
-    }
+    
   }, [countEat])
 
   // selected cat 데이터 변경될때마다 전체 데이터 업로드
@@ -226,10 +228,6 @@ const Detail = () => {
         ...filterCat
       ])
     }
-    // if (selectedCat.weight !== null) {
-    //   stateCheck()
-    // }
-    
   }, [selectedCat])
 
   if (!selectedCat) return

@@ -31,9 +31,10 @@ const Login = () => {
     } else if (!userList.some((item) => item.password === password)) {
       alert('비밀번호가 일치하지 않습니다.')
     } else {
-      setLoginUser(userList.filter(
+      let filterUser = userList.filter(
         (user) => (user.loginId === loginId) && (user.password === password)
-      ))
+      )
+      setLoginUser(filterUser[0])
       setIsLogin(true)
     }
   }
