@@ -19,6 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 const Detail = () => {
+  // TODO : custom hook으로 변경
   // ** react
   const params = useParams()
   const navigate = useNavigate()
@@ -37,9 +38,7 @@ const Detail = () => {
   const [work, setWork] = useState(false)
   const [eat, setEat] = useState(false)
 
-  //TODO : custom hook으로 변경
-  
-
+  // ** hook
   // 메세지 비활성화 타이머
   useInterval(() => {
     setTimer(timer - 1)
@@ -77,7 +76,6 @@ const Detail = () => {
   const counter = (actionType) => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
     actionTypeCheck(actionType)
-    actionWorkOut(actionType)
     if (((selectedCat.age % 3 === 0) || (selectedCat.age !== 0)) && (selectedCat.age !== null)) {
       addMessage(selectedCat.messages.slice(0, Math.floor(selectedCat.age / 3) + 1))
     }
@@ -164,12 +162,7 @@ const Detail = () => {
       setDisabled(true)
       setEat(true)
       disabledCheckOut(actionType)
-    }
-  }
-
-  // 운동하기 버튼 클릭시 체중 -2 & 10초동안 비활성화
-  const actionWorkOut = (actionType) => {
-    if (actionType === 'work out') {
+    } else if(actionType === 'work out'){
       handleWeight(-2)
       addHistory(actionType)
       setDisabled(true)

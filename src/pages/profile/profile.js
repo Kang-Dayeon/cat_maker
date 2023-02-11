@@ -1,26 +1,24 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import '../../App.css'
-//component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import ContentBox from '../../component/ContentBox'
-// fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTrash} from '@fortawesome/free-solid-svg-icons'
-// recoil
 import {useRecoilState} from 'recoil'
 import {catListState} from '../../recoil/catAtoms'
-// hook
 import useInterval from '../../hooks/useInterval'
-// data
 import {catStatus} from '../../database/catList'
 
 const Profile = () => {
+  // ** react
   const navigate = useNavigate()
 
+  // ** recoil
   const [catList, setCatList] = useRecoilState(catListState)
 
+  // ** hook
   useInterval(() => {
     handleTimeDifference()
   }, 1000)

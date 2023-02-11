@@ -1,6 +1,5 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-//component
 import Button from '../../component/Button'
 import ContentBox from '../../component/ContentBox'
 

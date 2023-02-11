@@ -1,24 +1,23 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useRef, useState} from 'react'
-//component
 import Button from '../../component/Button'
 import ContentBox from '../../component/ContentBox'
-//data
 import {catStatus, gender} from '../../database/catList'
-//hooks
 import useInput from '../../hooks/useInput'
-//recoil
 import {catListState} from '../../recoil/catAtoms'
 import {useRecoilState} from 'recoil'
 
 const NewCat = () => {
+  // ** react
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
   const [imageFile, setImageFile] = useState(null)
-
+  
+  // ** state
   const [catList, setCatList] = useRecoilState(catListState)
 
+  // ** hook
   const [text, setText] = useInput({
     name: '',
     gender: gender.male,

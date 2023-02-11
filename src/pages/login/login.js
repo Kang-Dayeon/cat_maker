@@ -16,10 +16,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPaw} from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
+  // ** recoil
   const userList = useRecoilValue(userListState)
   const setLoginUser = useSetRecoilState(loginUserState)
   const setIsLogin = useSetRecoilState(isLoginState)
 
+  // ** hook
   const [text, setText] = useInput({
     loginId: '',
     password: '',
