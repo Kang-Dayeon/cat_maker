@@ -101,22 +101,22 @@ const Profile = () => {
           if((item.weight < 2) && (item.weight > 0)){
             return {
               ...item,
-              state: catStatus.state1
+              state: catStatus.skinny
             }
           } else if(item.weight > 30){
             return {
               ...item,
-              state: catStatus.state3
+              state: catStatus.fatness
             }
           } else if((item.age >= 15) || ((item.age * 0.1) > (item.weight))){
             return {
               ...item,
-              state: catStatus.state4
+              state: catStatus.death
             }
           } else {
             return {
               ...item,
-              state: catStatus.state2
+              state: catStatus.normal
             }
           }
         })

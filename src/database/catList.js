@@ -3,10 +3,10 @@ export const gender = {
   female: 'Female'
 }
 export const catStatus = {
-  state1: 'Skinny',
-  state2: 'Normal',
-  state3: 'Fatness',
-  state4: 'Death'
+  skinny: 'Skinny',
+  normal: 'Normal',
+  fatness: 'Fatness',
+  death: 'Death'
 }
 export const catList = [
   {
@@ -16,7 +16,7 @@ export const catList = [
     image: require('../assets/image/cat01.jpg'),
     age: 1,
     weight: 1,
-    state: catStatus.state2,
+    state: catStatus.normal,
     history: [],
     messages: [
       '잘 키워보시게',
@@ -36,7 +36,7 @@ export const catList = [
     image: require('../assets/image/cat02.jpg'),
     age: 1,
     weight: 1,
-    state: catStatus.state2,
+    state: catStatus.normal,
     history: [],
     messages: [
       '반갑냥',
@@ -56,7 +56,7 @@ export const catList = [
     image: require('../assets/image/cat03.jpg'),
     age: 1,
     weight: 1,
-    state: catStatus.state2,
+    state: catStatus.normal,
     history: [],
     messages: [
       '냥?',

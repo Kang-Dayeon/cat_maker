@@ -1,20 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import '../../App.css'
-//component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import Timer from '../../component/Timer'
 import ContentBox from '../../component/ContentBox'
-//hook
 import useInterval from '../../hooks/useInterval'
-//recoil
 import {loginUserState} from '../../recoil/userAtoms'
 import {catListState, selectedCatState} from '../../recoil/catAtoms'
 import {useRecoilState, useRecoilValue} from 'recoil'
-//data
 import {catStatus} from '../../database/catList'
-// fontawesome
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
   faBottleWater,
@@ -24,14 +19,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 const Detail = () => {
+  // ** react
   const params = useParams()
   const navigate = useNavigate()
 
+  // ** recoil
   const user = useRecoilValue(loginUserState)
   const userName = user[0].name
   const [catList, setCatList] = useRecoilState(catListState)
   const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
+  // ** state
   const [countEat, setCountEat] = useState(0)
   const [random, setRandom] = useState(0)
   const [timer, setTimer] = useState(null)
@@ -40,9 +38,7 @@ const Detail = () => {
   const [work, setWork] = useState(false)
   const [eat, setEat] = useState(false)
 
-  const randomCheck = (random < 7) ? true : false
-  const catAge = (selectedCat) ? selectedCat.age : null
-  const weight = (selectedCat) ? selectedCat.weight : null
+  //TODO : custom hook으로 변경
 
   // 메세지 비활성화 타이머
   useInterval(() => {
@@ -82,7 +78,6 @@ const Detail = () => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
     actionTypeCheck(actionType)
     actionWorkOut(actionType)
-    stateCheck()
   }
 
   // history 추가
@@ -99,16 +94,6 @@ const Detail = () => {
             timeStamp: Date.now(),
           },
         ],
-      }
-    })
-  }
-
-  // 상태변화
-  const handleState = (state) => {
-    setSelectedCat((selectedCat) => {
-      return {
-        ...selectedCat,
-        state,
       }
     })
   }
@@ -145,9 +130,24 @@ const Detail = () => {
     })
   }
 
+  const handleState = () => {
+    setSelectedCat((selectedCat) => {
+    return {
+      ...selectedCat,
+      state: selectedCat.weight < 2 && selectedCat.weight > 0
+          ? catStatus.skinny
+          : selectedCat.weight > 30
+          ? catStatus.fatness
+          : selectedCat.age >= 15 || selectedCat.age * 0.1 > selectedCat.weight
+          ? catStatus.death
+          : catStatus.normal
+    };
+  })
+};
+
   // 밥 먹을지 안먹을지 & 먹었을경우 타입 체크 후 몸무게 더하기 + 버튼 비활성화
   const actionTypeCheck = (actionType) => {
-    if ((randomCheck) && (actionType !== 'work out')) {
+    if ((random < 7) && (actionType !== 'work out')) {
       if (actionType === 'water') {
         handleWeight(0.1)
       } else if (actionType === 'meat') {
@@ -157,7 +157,7 @@ const Detail = () => {
       }
       addHistory(actionType)
       setCountEat(countEat + 1)
-    } else if ((!randomCheck) && (actionType !== 'work out')) {
+    } else if ((actionType !== 'work out')) {
       setDisabled(true)
       setEat(true)
       disabledCheckOut(actionType)
@@ -175,18 +175,6 @@ const Detail = () => {
       setDelay(1000)
       disabledCheckOut(actionType)
     }
-  }
-
-  // 몸무게, 나이등 체크해서 상태변경하기
-  const stateCheck = () => {
-    ((selectedCat.weight < 2) && (selectedCat.weight > 0)) ?
-      handleState(catStatus.state1) :
-      (selectedCat.weight > 30) ?
-        handleState(catStatus.state3) :
-        ((selectedCat.age >= 15) ||
-          ((selectedCat.age * 0.1) > (selectedCat.weight))) ?
-          handleState(catStatus.state4) :
-          handleState(catStatus.state2)
   }
 
   //비활성화 풀기
@@ -221,22 +209,12 @@ const Detail = () => {
   useEffect(() => {
     if (selectedCat) {
       addAge(countEat)
+      handleState()
+    }
+    if (((selectedCat.age % 3 === 0) || (selectedCat.age !== 0)) && (selectedCat.age !== null)) {
+      addMessage(selectedCat.messages.slice(0, Math.floor(selectedCat.age / 3) + 1))
     }
   }, [countEat])
-
-  // 메세지 추가
-  useEffect(() => {
-    if (((catAge % 3 === 0) || (catAge !== 0)) && (catAge !== null)) {
-      addMessage(selectedCat.messages.slice(0, Math.floor(catAge / 3) + 1))
-    }
-  }, [catAge])
-
-  // 몸무게 변경될때마다 상태체크
-  useEffect(() => {
-    if (weight !== null) {
-      stateCheck()
-    }
-  }, [weight])
 
   // selected cat 데이터 변경될때마다 전체 데이터 업로드
   useEffect(() => {
@@ -248,6 +226,10 @@ const Detail = () => {
         ...filterCat
       ])
     }
+    // if (selectedCat.weight !== null) {
+    //   stateCheck()
+    // }
+    
   }, [selectedCat])
 
   if (!selectedCat) return
