@@ -12,7 +12,7 @@ export const userListState = atom({
 
 export const loginUserState = atom({
   key: 'loginUserState',
-  default: null,
+  default: {},
   effects_UNSTABLE: [persistAtom],
 })
 
@@ -21,3 +21,4 @@ export const isLoginState = atom({
   default: false,
   effects_UNSTABLE: [persistAtom],
 })
+// hanwoo-catchphrase-b2c

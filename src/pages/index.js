@@ -4,12 +4,11 @@ import Profile from './profile/profile'
 //component
 import Login from './login/login'
 import NewCat from './new/newCat'
-//recoil
-import {useRecoilValue} from 'recoil'
-import {isLoginState} from '../recoil/userAtoms'
+// redux
+import {useSelector} from 'react-redux'
 
 const Index = () => {
-  const isLogin = useRecoilValue(isLoginState)
+  const isLogin = useSelector(state => state.user.isLogin)
 
   return (
     <>
