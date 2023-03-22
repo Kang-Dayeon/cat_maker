@@ -11,7 +11,6 @@ export const userSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      console.log(action.payload.loginId)
       if(!state.users.some((item) => item.loginId === action.payload.loginId)){
         alert('아이디가 일치하지 않습니다.')
       } else if(!state.users.some((item) => item.password === action.payload.password)){

@@ -21,7 +21,8 @@ const Login = () => {
     password: '',
   })
 
-  const loginAction = () => {
+  const loginAction = (e) => {
+    e.preventDefault()
     dispatch(
       login({
         loginId: text.loginId,
@@ -40,8 +41,8 @@ const Login = () => {
           <input name="password" type="password" value={text.password}
                  onChange={setText} placeholder="PASSWORD"/>
           <Button
-            onClick={() => (text.loginId === '') ? alert('아이디를 입력하세요') :
-              (text.password === '') ? alert('비밀번호를 입력하세요') : loginAction
+            onClick={(e) => (text.loginId === '') ? alert('아이디를 입력하세요') :
+              (text.password === '') ? alert('비밀번호를 입력하세요') : loginAction(e)
             }
           >LOGIN</Button>
         </form>

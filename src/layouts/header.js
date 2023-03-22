@@ -1,24 +1,22 @@
 import React from 'react'
 import '../App.css'
 import {Link, useNavigate} from 'react-router-dom'
-import {useRecoilState, useResetRecoilState} from 'recoil'
-import {isLoginState} from '../recoil/userAtoms'
-import {catListState} from '../recoil/catAtoms'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowRightFromBracket} from '@fortawesome/free-solid-svg-icons'
-// import useHandleCatState from './store/useHandleCatState'
+// redux
+import {useDispatch} from 'react-redux'
+import {logout} from '../redux/login'
+import {useSelector} from 'react-redux'
 
 const Header = () => {
   const navigate = useNavigate()
 
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState)
-  const resetCatList = useResetRecoilState(catListState)
+  // ** redux
+  const dispatch = useDispatch()
+  const isLogin = useSelector(state => state.user.isLogin)
 
-  // useHandleCatState()
-
-  const logout = () => {
-    setIsLogin(false)
-    resetCatList()
+  const logoutAction = () => {
+    dispatch(logout())
     navigate('/')
   }
   return (
@@ -27,7 +25,7 @@ const Header = () => {
       {
         isLogin ?
           <div className="header__button">
-            <button className="logout_btn" onClick={async () => {await logout()}}>
+            <button className="logout_btn" onClick={async () => {await logoutAction()}}>
               <FontAwesomeIcon icon={faArrowRightFromBracket} />
             </button>
           </div> :
