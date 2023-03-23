@@ -4,9 +4,8 @@ import {Link, useNavigate} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowRightFromBracket} from '@fortawesome/free-solid-svg-icons'
 // redux
-import {useDispatch} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {logout} from '../redux/login'
-import {useSelector} from 'react-redux'
 
 const Header = () => {
   const navigate = useNavigate()

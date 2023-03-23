@@ -1,125 +1,49 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import '../../App.css'
+// components
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import ContentBox from '../../component/ContentBox'
+// icon
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTrash} from '@fortawesome/free-solid-svg-icons'
-import {useRecoilState} from 'recoil'
-import {catListState} from '../../recoil/catAtoms'
+// hooks
 import useInterval from '../../hooks/useInterval'
-import {catStatus} from '../../database/catList'
+// redux
+import {useDispatch, useSelector} from 'react-redux'
+import {
+  handleTimeDifference,
+  stateCheck,
+  handleCatListAge,
+  handleCatListWeight,
+  deleteCat
+} from '../../redux/cats'
 
 const Profile = () => {
   // ** react
   const navigate = useNavigate()
 
-  // ** recoil
-  const [catList, setCatList] = useRecoilState(catListState)
+  // ** redux
+  const dispatch = useDispatch()
+  const catList = useSelector(state => state.cat.catList)
 
   // ** hook
   useInterval(() => {
-    handleTimeDifference()
+    dispatch(handleTimeDifference())
   }, 1000)
 
   useInterval(() => {
-    stateCheck()
+    dispatch(stateCheck())
   }, 1000)
 
   useInterval(() => {
-    handleWeight()
+    dispatch(handleCatListWeight())
   }, 60000)
 
   useInterval(() => {
-    handleAge()
+    dispatch(handleCatListAge())
   }, 120000)
-
-  // 마지막 밥먹은시간, 현재시간 업데이트
-  const handleTimeDifference = () => {
-    setCatList(
-      catList.map((item, i) => {
-        if(item.history.length > 0){
-          return{
-            ...item,
-            timeDifference: Date.now() - item.history[item.history.length - 1].timeStamp,
-          }
-        } else {
-          return {
-            ...item,
-            timeDifference: null
-          }
-        }
-      })
-    )
-  }
-
-  // 나이 변경
-  const handleAge = () => {
-    setCatList(
-      catList.map((item, i) => {
-        if ((item.history.length > 0) && (item.state !== catStatus.state4)){
-          return {
-            ...item,
-            age: item.age + 1,
-          }
-        } else {
-          return {
-            ...item,
-            age: item.age
-          }
-        }
-      })
-    )
-  }
-
-  // 몸무게 변경
-  const handleWeight = () => {
-    setCatList(
-      catList.map((item, i) => {
-        if((item.timeDifference > 60000) && (item.state !== catStatus.state4)){
-          return{
-            ...item,
-            weight: Math.round((item.weight - 1) * 10) / 10,
-          }
-        } else {
-          return {
-            ...item,
-            weight: item.weight
-          }
-        }
-      })
-    )
-  }
-
-  // 몸무게, 나이등 체크해서 상태변경하기
-  const stateCheck = () => {
-      setCatList(
-        catList.map((item) => {
-          if((item.weight < 2) && (item.weight > 0)){
-            return {
-              ...item,
-              state: catStatus.skinny
-            }
-          } else if(item.weight > 30){
-            return {
-              ...item,
-              state: catStatus.fatness
-            }
-          } else if((item.age >= 15) || ((item.age * 0.1) > (item.weight))){
-            return {
-              ...item,
-              state: catStatus.death
-            }
-          } else {
-            return {
-              ...item,
-              state: catStatus.normal
-            }
-          }
-        })
-      )
-  }
 
   // 상세페이지 이동
   const handleDetailNavigate = (id) => {
@@ -127,10 +51,10 @@ const Profile = () => {
   }
 
   // 삭제하기
-  const deleteCat = (id) => {
+  const deleteCatAction = (id) => {
     const deleteConfirm = window.confirm('정말 삭제 하시겠습니까?')
-    if (catList && deleteConfirm) {
-      setCatList(catList => catList.filter(item => item.id !== id))
+    if (deleteConfirm) {
+      dispatch(deleteCat(id))
       navigate('/')
     }
   }
@@ -176,7 +100,7 @@ const Profile = () => {
           >
             View Profile
           </Button>
-          <div className="delete-button" onClick={() => deleteCat(catList.id)}>
+          <div className="delete-button" onClick={() => deleteCatAction(catList.id)}>
             <FontAwesomeIcon icon={faTrash}/>
           </div>
         </ContentBox>
