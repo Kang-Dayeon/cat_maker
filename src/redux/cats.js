@@ -33,10 +33,10 @@ export const catSlice = createSlice({
     },
     // state
     handleState: (state) => {
-      state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight >= 0)) ? data.catStatus.state1 :
-        (state.selectedCat.weight < 30) ? data.catStatus.state2 :
-           (state.selectedCat.age >= 15) || ((state.selectedCat.age * 0.1) > state.selectedCat.weight) ? data.catStatus.state4 :
-            data.catStatus.state3
+      state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight >= 0)) ? data.catStatus.skinny :
+        (state.selectedCat.weight < 30) ? data.catStatus.fatness :
+           (state.selectedCat.age >= 15) || ((state.selectedCat.age * 0.1) > state.selectedCat.weight) ? data.catStatus.death :
+            data.catStatus.normal
     },
     // message
     addMessage: (state, action) => {
