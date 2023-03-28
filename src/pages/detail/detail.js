@@ -1,15 +1,27 @@
 import React, {useEffect, useState} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import '../../App.css'
+// component
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import Timer from '../../component/Timer'
 import ContentBox from '../../component/ContentBox'
+// hook
 import useInterval from '../../hooks/useInterval'
+// recoil
 import {loginUserState} from '../../recoil/userAtoms'
 import {catListState, selectedCatState} from '../../recoil/catAtoms'
 import {useRecoilState, useRecoilValue} from 'recoil'
+// redux
+import {useDispatch, useSelector} from 'react-redux'
+import {
+  addHistory,
+  handleSelectedCat,
+  handleWeight,
+} from '../../redux/cats'
+// data
 import {catStatus} from '../../database/catList'
+//icon
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
   faBottleWater,
@@ -24,10 +36,15 @@ const Detail = () => {
   const params = useParams()
   const navigate = useNavigate()
 
+  // ** redux
+  const dispatch = useDispatch()
+  const catList = useSelector(state => state.cat.catList)
+  const selectedCat = useSelector(state => state.cat.selectedCat)
+
   // ** recoil
   const user = useRecoilValue(loginUserState)
-  const [catList, setCatList] = useRecoilState(catListState)
-  const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
+  // const [catList, setCatList] = useRecoilState(catListState)
+  // const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
   // ** state
   const [countEat, setCountEat] = useState(0)
@@ -190,12 +207,13 @@ const Detail = () => {
     }
   }
 
-  // selected cat 업로드
+  // selectedCat 업로드
   useEffect(() => {
     if ((params.key) &&
       (catList.find(cat => cat.id === parseInt(params.key)))) {
-      const finder = catList.find(cats => cats.id === parseInt(params.key))
-      setSelectedCat(finder)
+      dispatch(handleSelectedCat(parseInt(params.key)))
+      // const finder = catList.find(cats => cats.id === parseInt(params.key))
+      // setSelectedCat(finder)
     } else {
       navigate('/')
     }
@@ -212,16 +230,16 @@ const Detail = () => {
   }, [countEat])
 
   // selected cat 데이터 변경될때마다 전체 데이터 업로드
-  useEffect(() => {
-    if (selectedCat) {
-      const filterCat = catList.filter(cat => cat.id !== selectedCat.id)
-      filterCat.push(selectedCat)
-      filterCat.sort((a,b) => a.id - b.id)
-      setCatList([
-        ...filterCat
-      ])
-    }
-  }, [selectedCat])
+  // useEffect(() => {
+  //   if (selectedCat) {
+  //     const filterCat = catList.filter(cat => cat.id !== selectedCat.id)
+  //     filterCat.push(selectedCat)
+  //     filterCat.sort((a,b) => a.id - b.id)
+  //     setCatList([
+  //       ...filterCat
+  //     ])
+  //   }
+  // }, [selectedCat])
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
