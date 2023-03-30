@@ -25,7 +25,7 @@ export const catSlice = createSlice({
     },
     // weight
     handleWeight: (state, action) => {
-      state.selectedCat.weight = action.payload
+      state.selectedCat.weight = Math.round((state.selectedCat.weight + action.payload) * 10) / 10
     },
     // age
     handleAge: (state, action) => {
@@ -40,7 +40,7 @@ export const catSlice = createSlice({
     },
     // message
     addMessage: (state, action) => {
-      state.selectedCat.message = state.selectedCat.messages.slice(0, action.payload)
+      state.selectedCat.message = [...action.payload]
     },
     // last eat
     handleTimeDifference: (state) => {

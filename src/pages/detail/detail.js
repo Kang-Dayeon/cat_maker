@@ -10,14 +10,15 @@ import ContentBox from '../../component/ContentBox'
 import useInterval from '../../hooks/useInterval'
 // recoil
 import {loginUserState} from '../../recoil/userAtoms'
-import {catListState, selectedCatState} from '../../recoil/catAtoms'
 import {useRecoilState, useRecoilValue} from 'recoil'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
 import {
   addHistory,
   handleSelectedCat,
+  handleAge,
   handleWeight,
+  addMessage
 } from '../../redux/cats'
 // data
 import {catStatus} from '../../database/catList'
@@ -69,7 +70,7 @@ const Detail = () => {
   // 마지막 밥먹고 1분 이상됐을경우 체중 -1
   useInterval(() => {
     if ((selectedCat) && (selectedCat.timeDifference > 60000) && (selectedCat.state !== catStatus.state4)) {
-      handleWeight(-1)
+      dispatch(handleWeight(-1))
     }
   }, 60000)
 
@@ -94,26 +95,18 @@ const Detail = () => {
     setRandom(Math.floor((Math.random() * (10 - 2)) + 2))
     actionTypeCheck(actionType)
     if (((selectedCat.age % 3 === 0) || (selectedCat.age !== 0)) && (selectedCat.age !== null)) {
-      addMessage(selectedCat.messages.slice(0, Math.floor(selectedCat.age / 3) + 1))
+      dispatch(addMessage(selectedCat.messages.slice(0, Math.floor(selectedCat.age / 3) + 1)))
     }
   }
 
-  // history 추가
-  const addHistory = (actionType, currentTime) => {
-    setSelectedCat((selectedCat) => {
-      return {
-        ...selectedCat,
-        history: [
-          ...selectedCat.history,
-          {
-            type: 'eat',
-            timeLine: new Date().toLocaleString() + ' ' + user.name,
-            actionType,
-            timeStamp: Date.now(),
-          },
-        ],
-      }
-    })
+  const addHistoryAction = (actionType) => {
+    dispatch(addHistory({
+        type: 'eat',
+        timeLine: new Date().toLocaleString() + ' ' + user.name,
+        actionType,
+        timeStamp: Date.now(),
+      },
+    ))
   }
 
   // 상태변화
@@ -130,58 +123,32 @@ const Detail = () => {
       }
     })
   }
-
-  // 체중추가
-  const handleWeight = (weight) => {
-    setSelectedCat((selectedCat) => {
-      return {
-        ...selectedCat,
-        weight: Math.round((selectedCat.weight + weight) * 10) / 10,
-      }
-    })
-  }
-
   // 나이추가
   const addAge = () => {
-    if ((countEat % 3 === 0) && (countEat !== 0) && (selectedCat.history.length > 0) && (selectedCat.state !== catStatus.state4)) {
-      setSelectedCat((selectedCat) => {
-        return {
-          ...selectedCat,
-          age: selectedCat.age + 1,
-        }
-      })
+    if ((countEat % 3 === 0) && (countEat !== 0) && (selectedCat.history.length > 0) && (selectedCat.state !== catStatus.death)) {
+      dispatch(handleAge(1))
     }
-  }
-
-  // 메세지추가
-  const addMessage = (message) => {
-    setSelectedCat((selectedCat) => {
-      return {
-        ...selectedCat,
-        message: [...message],
-      }
-    })
   }
 
   // 밥 먹을지 안먹을지 & 먹었을경우 타입 체크 후 몸무게 더하기 + 버튼 비활성화
   const actionTypeCheck = (actionType) => {
     if ((random < 7) && (actionType !== 'work out')) {
       if (actionType === 'water') {
-        handleWeight(0.1)
+        dispatch(handleWeight(0.1))
       } else if (actionType === 'meat') {
-        handleWeight(3)
+        dispatch(handleWeight(3))
       } else if (actionType === 'feed') {
-        handleWeight(1)
+        dispatch(handleWeight(1))
       }
-      addHistory(actionType)
+      addHistoryAction(actionType)
       setCountEat(countEat + 1)
     } else if ((actionType !== 'work out')) {
       setDisabled(true)
       setEat(true)
       disabledCheckOut(actionType)
     } else if(actionType === 'work out'){
-      handleWeight(-2)
-      addHistory(actionType)
+      dispatch(handleWeight(-2))
+      addHistoryAction(actionType)
       setDisabled(true)
       setWork(true)
       setTimer(10)
@@ -212,8 +179,6 @@ const Detail = () => {
     if ((params.key) &&
       (catList.find(cat => cat.id === parseInt(params.key)))) {
       dispatch(handleSelectedCat(parseInt(params.key)))
-      // const finder = catList.find(cats => cats.id === parseInt(params.key))
-      // setSelectedCat(finder)
     } else {
       navigate('/')
     }
@@ -228,18 +193,6 @@ const Detail = () => {
     }
     
   }, [countEat])
-
-  // selected cat 데이터 변경될때마다 전체 데이터 업로드
-  // useEffect(() => {
-  //   if (selectedCat) {
-  //     const filterCat = catList.filter(cat => cat.id !== selectedCat.id)
-  //     filterCat.push(selectedCat)
-  //     filterCat.sort((a,b) => a.id - b.id)
-  //     setCatList([
-  //       ...filterCat
-  //     ])
-  //   }
-  // }, [selectedCat])
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨
