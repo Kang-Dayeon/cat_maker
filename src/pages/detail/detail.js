@@ -10,13 +10,15 @@ import ContentBox from '../../component/ContentBox'
 import useInterval from '../../hooks/useInterval'
 // recoil
 import {loginUserState} from '../../recoil/userAtoms'
-import {useRecoilState, useRecoilValue} from 'recoil'
+import {useRecoilValue} from 'recoil'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
 import {
   addHistory,
+  addTimeDifference,
   handleSelectedCat,
   handleAge,
+  handleState,
   handleWeight,
   addMessage
 } from '../../redux/cats'
@@ -44,8 +46,6 @@ const Detail = () => {
 
   // ** recoil
   const user = useRecoilValue(loginUserState)
-  // const [catList, setCatList] = useRecoilState(catListState)
-  // const [selectedCat, setSelectedCat] = useRecoilState(selectedCatState)
 
   // ** state
   const [countEat, setCountEat] = useState(0)
@@ -69,7 +69,7 @@ const Detail = () => {
 
   // 마지막 밥먹고 1분 이상됐을경우 체중 -1
   useInterval(() => {
-    if ((selectedCat) && (selectedCat.timeDifference > 60000) && (selectedCat.state !== catStatus.state4)) {
+    if ((selectedCat) && (selectedCat.timeDifference > 60000) && (selectedCat.state !== catStatus.death)) {
       dispatch(handleWeight(-1))
     }
   }, 60000)
@@ -80,14 +80,11 @@ const Detail = () => {
   }, 120000)
 
   const handleTimeDifference = () => {
-    if (selectedCat.history.length > 0) {
-      setSelectedCat((selectedCat) => {
-        return {
-          ...selectedCat,
-          timeDifference: Date.now() - selectedCat.history[selectedCat.history.length - 1].timeStamp
-        }
-      })
-    }
+    dispatch(addTimeDifference(
+      {
+        timeDifference: Date.now() - selectedCat.history[selectedCat.history.length - 1].timeStamp
+      }
+  ))
   }
 
   //버튼클릭시 함수
@@ -109,20 +106,6 @@ const Detail = () => {
     ))
   }
 
-  // 상태변화
-  const handleState = () => {
-    setSelectedCat((selectedCat) => {
-      return {
-        ...selectedCat,
-        state:((selectedCat.weight < 2) && (selectedCat.weight > 0)) ?
-            catStatus.skinny :
-            (selectedCat.weight > 30) ?
-              catStatus.fatness :
-              ((selectedCat.age >= 15) || ((selectedCat.age * 0.1) > (selectedCat.weight))) ?
-                catStatus.death : catStatus.normal
-      }
-    })
-  }
   // 나이추가
   const addAge = () => {
     if ((countEat % 3 === 0) && (countEat !== 0) && (selectedCat.history.length > 0) && (selectedCat.state !== catStatus.death)) {
@@ -188,8 +171,7 @@ const Detail = () => {
   useEffect(() => {
     if (selectedCat) {
       addAge(countEat)
-      handleState()
-      
+      dispatch(handleState())
     }
     
   }, [countEat])

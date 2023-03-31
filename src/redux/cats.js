@@ -23,6 +23,11 @@ export const catSlice = createSlice({
     addHistory: (state, action) => {
       state.selectedCat.history.push(action.payload)
     },
+    addTimeDifference: (state, action) => {
+      if (state.selectedCat.history.length > 0){
+        state.selectedCat.push(action.payload)
+      }
+    },
     // weight
     handleWeight: (state, action) => {
       state.selectedCat.weight = Math.round((state.selectedCat.weight + action.payload) * 10) / 10
@@ -125,6 +130,7 @@ export const catSlice = createSlice({
 
 export const {
   addHistory,
+  addTimeDifference,
   handleSelectedCat,
   handleWeight,
   handleAge,
