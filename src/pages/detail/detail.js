@@ -20,7 +20,8 @@ import {
   handleAge,
   handleState,
   handleWeight,
-  addMessage
+  addMessage,
+  updateData
 } from '../../redux/cats'
 // data
 import {catStatus} from '../../database/catList'
@@ -173,8 +174,12 @@ const Detail = () => {
       addAge(countEat)
       dispatch(handleState())
     }
-    
   }, [countEat])
+
+  useEffect(() => {
+    dispatch(updateData())
+  }, [selectedCat])
+
 
   if (!selectedCat) return
   // useEffect는 렌더링 이후 발생하기 때문에 이걸로 데이터체크를 해주고(아예 처음엔 데이터가 null임) 다시 재렌더링하면서 useEffect가 발생 됨

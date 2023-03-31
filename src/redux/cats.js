@@ -11,18 +11,25 @@ export const catSlice = createSlice({
   },
   //todos: 리듀서 하나당 하나의 기능만
   reducers: {
-    upDateData: (state) => {
+    // 데이터 업로드
+    updateData: (state) => {
       state.catList = [
         ...state.catList.filter(cat => cat.id !== state.selectedCat.id),
         state.selectedCat,
       ]
+      state.catList.sort((a,b) => {
+        return a.id - b.id
+      })
     },
+    // selectedCat 찾는 함수
     handleSelectedCat: (state, action) => {
       state.selectedCat = state.catList.find(cat => cat.id === action.payload)
     },
+    // 밥먹거나 운동하면 히스토리 저장
     addHistory: (state, action) => {
       state.selectedCat.history.push(action.payload)
     },
+    // 마지막으로 밥먹고 경과된 시간 체크
     addTimeDifference: (state, action) => {
       if (state.selectedCat.history.length > 0){
         state.selectedCat.push(action.payload)
@@ -136,13 +143,12 @@ export const {
   handleAge,
   handleState,
   addMessage,
-  upDateData,
+  updateData,
   handleTimeDifference,
   stateCheck,
   handleCatListAge,
   handleCatListWeight,
   deleteCat
-
 } = catSlice.actions
 export default catSlice.reducer
 
