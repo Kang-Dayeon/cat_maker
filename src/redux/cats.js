@@ -32,7 +32,7 @@ export const catSlice = createSlice({
     // 마지막으로 밥먹고 경과된 시간 체크
     addTimeDifference: (state, action) => {
       if (state.selectedCat.history.length > 0){
-        state.selectedCat.push(action.payload)
+        state.selectedCat.timeDifference = action.payload
       }
     },
     // weight
@@ -56,7 +56,7 @@ export const catSlice = createSlice({
     },
     // last eat
     handleTimeDifference: (state) => {
-      state.catList.map((item, i) => {
+      state.catList.map((item) => {
         if(item.history.length > 0){
           return{
             ...item,
@@ -97,7 +97,7 @@ export const catSlice = createSlice({
       })
     },
     handleCatListAge: (state) => {
-      state.catList.map((item, i) => {
+      state.catList.map((item) => {
         if ((item.history.length > 0) && (item.state !== catStatus.death)){
           return {
             ...item,
@@ -112,7 +112,7 @@ export const catSlice = createSlice({
       })
     },
     handleCatListWeight: (state) => {
-      state.catList.map((item, i) => {
+      state.catList.map((item) => {
         if((item.timeDifference > 60000) && (item.state !== catStatus.death)){
           return{
             ...item,

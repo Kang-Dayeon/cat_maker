@@ -13,15 +13,15 @@ const reducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
   reducer,
-  middleware: (getDefaultMiddleware) =>
-    //미들웨어 작성시 에러 주의
-    getDefaultMiddleware(
-      {
-        serializableCheck: {
-          ignoredActions: [PERSIST, PURGE],
-        },
-      }
-    ).concat(logger)
+  // middleware: (getDefaultMiddleware) =>
+  //   //미들웨어 작성시 에러 주의
+  //   getDefaultMiddleware(
+  //     {
+  //       serializableCheck: {
+  //         ignoredActions: [PERSIST, PURGE],
+  //       },
+  //     }
+  //   ).concat(logger)
 })
 
 export { store }

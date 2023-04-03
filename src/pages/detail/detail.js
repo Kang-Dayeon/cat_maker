@@ -8,9 +8,6 @@ import Timer from '../../component/Timer'
 import ContentBox from '../../component/ContentBox'
 // hook
 import useInterval from '../../hooks/useInterval'
-// recoil
-import {loginUserState} from '../../recoil/userAtoms'
-import {useRecoilValue} from 'recoil'
 // redux
 import {useDispatch, useSelector} from 'react-redux'
 import {
@@ -42,11 +39,9 @@ const Detail = () => {
 
   // ** redux
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user.loginUser)
   const catList = useSelector(state => state.cat.catList)
   const selectedCat = useSelector(state => state.cat.selectedCat)
-
-  // ** recoil
-  const user = useRecoilValue(loginUserState)
 
   // ** state
   const [countEat, setCountEat] = useState(0)
@@ -81,11 +76,7 @@ const Detail = () => {
   }, 120000)
 
   const handleTimeDifference = () => {
-    dispatch(addTimeDifference(
-      {
-        timeDifference: Date.now() - selectedCat.history[selectedCat.history.length - 1].timeStamp
-      }
-  ))
+    dispatch(addTimeDifference(Date.now() - selectedCat.history[selectedCat.history.length - 1].timeStamp))
   }
 
   //버튼클릭시 함수
@@ -173,6 +164,7 @@ const Detail = () => {
     if (selectedCat) {
       addAge(countEat)
       dispatch(handleState())
+      console.log(selectedCat)
     }
   }, [countEat])
 
@@ -266,7 +258,7 @@ const Detail = () => {
               </li>
               <li><h3>[ Timeline ]</h3></li>
               {
-                selectedCat.history.map((item, i) => {
+                selectedCat.history.map((item) => {
                   return (
                     <li>
                       <span>
@@ -291,7 +283,7 @@ const Detail = () => {
             <h4>[ Message ]</h4>
             <ul>
               {
-                selectedCat.message.map((item, i) => {
+                selectedCat.message.map((item) => {
                   return (
                     <li>{item}</li>
                   )
