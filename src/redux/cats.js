@@ -46,7 +46,7 @@ export const catSlice = createSlice({
     // state
     handleState: (state) => {
       state.selectedCat.state = ((state.selectedCat.weight < 2) && (state.selectedCat.weight >= 0)) ? data.catStatus.skinny :
-        (state.selectedCat.weight < 30) ? data.catStatus.fatness :
+        (state.selectedCat.weight > 30) ? data.catStatus.fatness :
            (state.selectedCat.age >= 15) || ((state.selectedCat.age * 0.1) > state.selectedCat.weight) ? data.catStatus.death :
             data.catStatus.normal
     },
@@ -98,7 +98,7 @@ export const catSlice = createSlice({
     },
     handleCatListAge: (state) => {
       state.catList.map((item) => {
-        if ((item.history.length > 0) && (item.state !== catStatus.death)){
+        if ((item.history.length > 0) && (item.state !== data.catStatus.death)){
           return {
             ...item,
             age: item.age + 1,
@@ -113,7 +113,7 @@ export const catSlice = createSlice({
     },
     handleCatListWeight: (state) => {
       state.catList.map((item) => {
-        if((item.timeDifference > 60000) && (item.state !== catStatus.death)){
+        if((item.timeDifference > 60000) && (item.state !== data.catStatus.death)){
           return{
             ...item,
             weight: Math.round((item.weight - 1) * 10) / 10,
@@ -127,7 +127,7 @@ export const catSlice = createSlice({
       })
     },
     deleteCat: (state, action) => {
-      state.catList.filter(item => item.id !== action.payload)
+      state.catList = state.catList.filter(item => item.id !== action.payload)
     }
   },
   extraReducers: (builder) => {

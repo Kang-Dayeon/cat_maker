@@ -164,7 +164,6 @@ const Detail = () => {
     if (selectedCat) {
       addAge(countEat)
       dispatch(handleState())
-      console.log(selectedCat)
     }
   }, [countEat])
 
