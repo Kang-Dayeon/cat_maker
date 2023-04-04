@@ -100,7 +100,6 @@ const Detail = () => {
 
   // 나이추가
   const addAge = () => {
-    console.log(countEat)
     if ((countEat % 3 === 0) && (countEat !== 0) && (selectedCat.history.length > 0) && (selectedCat.state !== catStatus.death)) {
       dispatch(handleAge(1))
     }
@@ -170,6 +169,7 @@ const Detail = () => {
 
   useEffect(() => {
     dispatch(updateData())
+    dispatch(handleState())
   }, [selectedCat])
 
 
