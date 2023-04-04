@@ -1,7 +1,6 @@
 import * as data from '../database/catList'
 import {createSlice} from '@reduxjs/toolkit'
 import {PURGE} from 'redux-persist'
-import {catStatus} from '../database/catList'
 
 export const catSlice = createSlice({
   name: 'cat',
@@ -76,22 +75,22 @@ export const catSlice = createSlice({
         if((item.weight < 2) && (item.weight > 0)){
           return {
             ...item,
-            state: catStatus.skinny
+            state: data.catStatus.skinny
           }
         } else if(item.weight > 30){
           return {
             ...item,
-            state: catStatus.fatness
+            state: data.catStatus.fatness
           }
         } else if((item.age >= 15) || ((item.age * 0.1) > (item.weight))){
           return {
             ...item,
-            state: catStatus.death
+            state: data.catStatus.death
           }
         } else {
           return {
             ...item,
-            state: catStatus.normal
+            state: data.catStatus.normal
           }
         }
       })
