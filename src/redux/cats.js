@@ -56,77 +56,33 @@ export const catSlice = createSlice({
     // last eat
     handleTimeDifference: (state) => {
       state.catList.map((item) => {
-        if(item.history.length > 0){
-          return{
-            ...item,
-            timeDifference: Date.now() - item.history[item.history.length - 1].timeStamp,
-          }
-        } else {
-          return {
-            ...item,
-            timeDifference: null
-          }
-        }
+        return item.timeDifference = (item.history.length > 0) ? Date.now() - item.history[item.history.length - 1].timeStamp : null
       })
     },
     // profile page 몸무게, 나이등 체크해서 상태변경하기
     stateCheck: (state) => {
       state.catList.map((item) => {
-        if((item.weight < 2) && (item.weight > 0)){
-          return {
-            ...item,
-            state: data.catStatus.skinny
-          }
-        } else if(item.weight > 30){
-          return {
-            ...item,
-            state: data.catStatus.fatness
-          }
-        } else if((item.age >= 15) || ((item.age * 0.1) > (item.weight))){
-          return {
-            ...item,
-            state: data.catStatus.death
-          }
-        } else {
-          return {
-            ...item,
-            state: data.catStatus.normal
-          }
-        }
+        return item.state = ((item.weight < 2) && (item.weight > 0)) ? data.catStatus.skinny
+        : (item.weight > 30) ? data.catStatus.fatness
+        : ((item.age >= 15) || ((item.age * 0.1) > (item.weight))) ? data.catStatus.death
+        : data.catStatus.normal
       })
     },
     handleCatListAge: (state) => {
       state.catList.map((item) => {
-        if ((item.history.length > 0) && (item.state !== data.catStatus.death)){
-          return {
-            ...item,
-            age: item.age + 1,
-          }
-        } else {
-          return {
-            ...item,
-            age: item.age
-          }
-        }
+        return item.age = ((item.history.length > 0) && (item.state !== data.catStatus.death)) ? item.age + 1 : item.age
       })
     },
     handleCatListWeight: (state) => {
       state.catList.map((item) => {
-        if((item.timeDifference > 60000) && (item.state !== data.catStatus.death)){
-          return{
-            ...item,
-            weight: Math.round((item.weight - 1) * 10) / 10,
-          }
-        } else {
-          return {
-            ...item,
-            weight: item.weight
-          }
-        }
+        return item.weight = ((item.timeDifference > 60000) && (item.state !== data.catStatus.death)) ? Math.round((item.weight - 1) * 10) / 10 : item.weight
       })
     },
     deleteCat: (state, action) => {
       state.catList = state.catList.filter(item => item.id !== action.payload)
+    },
+    createCat : (state, action) => {
+      state.catList.push(action.payload)
     }
   },
   extraReducers: (builder) => {
@@ -147,7 +103,8 @@ export const {
   stateCheck,
   handleCatListAge,
   handleCatListWeight,
-  deleteCat
+  deleteCat,
+  createCat
 } = catSlice.actions
 export default catSlice.reducer
 
