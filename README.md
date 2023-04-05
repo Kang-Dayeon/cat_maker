@@ -2,6 +2,14 @@
 
 ## Description
 Grow a cat by feeding it and exercising it!
+* Test user info
+<pre>
+<code>
+ID : cat
+PW : 123123
+</code>
+</pre>
+  
 
 ## Stacks
 * Environment
