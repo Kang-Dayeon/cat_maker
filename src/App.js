@@ -6,8 +6,6 @@ import { store } from './redux/store'
 import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
 import {PersistGate} from 'redux-persist/integration/react'
-//recoil
-import { RecoilRoot } from 'recoil'
 
 export const persistor = persistStore(store)
 
@@ -16,9 +14,7 @@ function App() {
     <BrowserRouter>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <RecoilRoot>
-            <Routers/>
-          </RecoilRoot>
+          <Routers/>
         </PersistGate>
       </Provider>
     </BrowserRouter>

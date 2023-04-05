@@ -1,21 +1,26 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useRef, useState} from 'react'
+// component
 import Button from '../../component/Button'
 import ContentBox from '../../component/ContentBox'
+// data
 import {catStatus, gender} from '../../database/catList'
+// hook
 import useInput from '../../hooks/useInput'
-import {catListState} from '../../recoil/catAtoms'
-import {useRecoilState} from 'recoil'
+// redux
+import {useSelector, useDispatch} from 'react-redux'
+import {createCat} from '../../redux/cats'
 
 const NewCat = () => {
   // ** react
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
   const [imageFile, setImageFile] = useState(null)
-  
-  // ** state
-  const [catList, setCatList] = useRecoilState(catListState)
+
+  // ** redux
+  const dispatch = useDispatch()
+  const catList = useSelector(state => state.cat.catList)
 
   // ** hook
   const [text, setText] = useInput({
@@ -44,7 +49,7 @@ const NewCat = () => {
       image: imageFile.thumbnail,
       age: 1,
       weight: 1,
-      state: catStatus.state2,
+      state: catStatus.normal,
       history: [],
       messages: [
         '잘 키워보시게',
@@ -57,12 +62,7 @@ const NewCat = () => {
       message: [],
       timeDifference: null
     }
-    setCatList((catList) => {
-      return [
-        ...catList,
-        newCat,
-      ]
-    })
+    dispatch(createCat(newCat))
     navigate('/')
   }
 
