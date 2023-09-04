@@ -5,7 +5,7 @@ export const userList = [
     password: '123123'
   },
   {
-    name: '캣맘',
+    name: 'マミ',
     loginId: 'cat',
     password: '123123'
   }
