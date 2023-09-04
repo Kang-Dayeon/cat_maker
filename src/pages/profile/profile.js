@@ -5,6 +5,7 @@ import '../../App.css'
 import Button from '../../component/Button'
 import Badge from '../../component/Badge'
 import ContentBox from '../../component/ContentBox'
+import NewCat from '../new/newCat'
 // icon
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTrash} from '@fortawesome/free-solid-svg-icons'
@@ -106,6 +107,7 @@ const Profile = () => {
         </ContentBox>
       })
       }
+      <NewCat />
     </>
   )
 }

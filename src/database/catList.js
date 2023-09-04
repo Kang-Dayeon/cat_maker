@@ -1,3 +1,6 @@
+import cat01 from '../assets/image/cat01.jpg'
+import cat02 from '../assets/image/cat02.jpg'
+import cat03 from '../assets/image/cat03.jpg'
 export const gender = {
   male: 'Male',
   female: 'Female'
@@ -13,7 +16,7 @@ export const catList = [
     id: 0,
     name: 'チーズ',
     gender: gender.female,
-    image: require('../assets/image/cat01.jpg'),
+    image: cat01,
     age: 1,
     weight: 1,
     state: catStatus.normal,
@@ -33,7 +36,7 @@ export const catList = [
     id: 1,
     name: 'モチ',
     gender: gender.male,
-    image: require('../assets/image/cat02.jpg'),
+    image: cat02,
     age: 1,
     weight: 1,
     state: catStatus.normal,
@@ -53,7 +56,7 @@ export const catList = [
     id: 2,
     name: '쿠로',
     gender: gender.female,
-    image: require('../assets/image/cat03.jpg'),
+    image: cat03,
     age: 1,
     weight: 1,
     state: catStatus.normal,
