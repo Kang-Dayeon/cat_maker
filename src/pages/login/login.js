@@ -41,8 +41,8 @@ const Login = () => {
           <input name="password" type="password" value={text.password}
                  onChange={setText} placeholder="PASSWORD"/>
           <Button
-            onClick={(e) => (text.loginId === '') ? alert('아이디를 입력하세요') :
-              (text.password === '') ? alert('비밀번호를 입력하세요') : loginAction(e)
+            onClick={(e) => (text.loginId === '') ? alert('ID入力お願いします。') :
+              (text.password === '') ? alert('PASSWORD入力お願いします。') : loginAction(e)
             }
           >LOGIN</Button>
         </form>

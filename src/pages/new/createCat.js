@@ -52,12 +52,12 @@ const NewCat = () => {
       state: catStatus.normal,
       history: [],
       messages: [
-        '잘 키워보시게',
-        '밥줘!!!',
-        '벌써 많이 컷다용🥳',
-        '세월이 빠르구먼..홀홀',
-        '이제 움직이기 힘들다옹',
-        '그동안 고마웠...😇',
+        'よろしくお願いニャン！！',
+        'お腹ぺこぺこ💭',
+        'もう大きくなったニャン🥳',
+        '時間早いニャン。。',
+        'もう動くの難しい🙀',
+        '今までありがとうニャン。。😇'
       ],
       message: [],
       timeDifference: null
@@ -86,7 +86,7 @@ const NewCat = () => {
 
           <div className="new-cat__input new-cat__text">
             <input name="name" type="text" value={text.name} onChange={setText}
-                   placeholder="이름을 지어주세요!" maxLength="5"/>
+                   placeholder="名前を付けてください!" maxLength="5"/>
             <select className="select" name="gender" onChange={setText}
                     value={text.gender}>
               <option value={gender.male} selected="selected">Male</option>
@@ -94,8 +94,8 @@ const NewCat = () => {
             </select>
           </div>
         </div>
-        <Button onClick={() => (text.name === '') ? alert('이름을 입력해주세요') :
-          (imageFile === null) ? alert('이미지를 선택 해 주세요') :
+        <Button onClick={() => (text.name === '') ? alert('名前を入力お願いします。') :
+          (imageFile === null) ? alert('イメージお願いします。') :
             addCat()
         }>Create</Button>
       </form>

@@ -179,7 +179,7 @@ const Detail = () => {
   return (
     <ContentBox size={'big'}>
       <div className="detail_profile">
-        <Timer work={eat} top={'-25'} type={'lg'}>놉!! 안머겅!!</Timer>
+        <Timer work={eat} top={'-25'} type={'lg'}>もういいよ！！</Timer>
         <div className={(selectedCat.state === 'Fatness') ? 'detail_img img fat' :
           (selectedCat.state === 'Death') ?
             'detail_img img death' :
