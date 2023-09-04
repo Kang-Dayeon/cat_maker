@@ -1,5 +1,7 @@
 # Cat Maker 🐈
 
+<img src="https://github.com/Kang-Dayeon/cat_maker/assets/94333816/fae2f611-179d-4610-8146-9c0026445afe" />
+
 ## Description
 Grow a cat by feeding it and exercising it!
 * Test user info
