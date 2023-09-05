@@ -54,7 +54,7 @@ export const catList = [
   },
   {
     id: 2,
-    name: '쿠로',
+    name: 'クロ',
     gender: gender.female,
     image: cat03,
     age: 1,
