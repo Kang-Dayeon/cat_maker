@@ -11,7 +11,9 @@ ID : cat
 PW : 123123
 </code>
 </pre>
-  
+
+## Server
+https://kang-dayeon.github.io/cat_maker/
 
 ## Stacks
 * Environment
